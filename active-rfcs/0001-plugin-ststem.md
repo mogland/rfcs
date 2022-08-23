@@ -143,48 +143,21 @@ async method(args) {
 
 TBD.
 
-**在 EventManager 中插件生命周期**
+**活动注入**
 
-EventManager 需要考虑到安装时插件额外的的验证函数、激活函数，再将插件加载至 NEXT 中。
-
-它具有以下生命周期：
-
-- `INSTALLED`: 安装时
-- `RESOLVED`: 解析完成后
-- `STARTING`: 启动时
-- `ACTIVE`: 激活时
-- `STOPPING`: 停止时
-- `UNINSTALLED`: 卸载后
-
-最后需要冻结枚举类型，不能添加新的值。
+使用 `@EventInject()` 标记方法，编译时自动注入函数，装饰器应当接受一个参数，该参数是字符串，表示活动的名称，活动管理器会根据该名称调度活动。
 
 ```typescript
-class PluginState {
-  constructor(state) {
-    this.state = state;
-    Object.freeze(this);
-  }
-
-  static INSTALLED = new PluginState("INSTALLED");
-  static RESOLVED = new PluginState("RESOLVED");
-  static STARTING = new PluginState("STARTING");
-  static ACTIVE = new PluginState("ACTIVE");
-  static STOPPING = new PluginState("STOPPING");
-  static UNINSTALLED = new PluginState("UNINSTALLED");
-
-  static values = function () {
-    const enumValues = [];
-    enumValues.push(PluginState.INSTALLED);
-    enumValues.push(PluginState.RESOLVED);
-    enumValues.push(PluginState.STARTING);
-    enumValues.push(PluginState.STOPPING);
-    enumValues.push(PluginState.ACTIVE);
-    enumValues.push(PluginState.UNINSTALLED);
-    return enumValues;
-  };
+enum EventInjectMethod {
+  GET_REQUEST = "request", // 接受请求时
+  PUSH_RESPONSE = "response", // 发送响应时
+  POST_CREATE = "create:post", // 在创建文章时调用
+  POST_UPDATE = "update:post", // 在更新文章时调用
+  POST_DELETE = "delete:post", // 在删除文章时调用
+  POST_FIND = "find:post", // 在查询文章时调用
+  PAGE_CREATE = "create:page", // 在创建页面时调用
+  // ...
 }
-
-Object.freeze(PluginState);
 ```
 
 **在插件中的插件生命周期**
@@ -196,12 +169,46 @@ class TestPlugin extends Plugin {
   constructor(options) {
     super(options);
   }
-  async install(): void {}
-  async start(): void {}
-  async stop(): void {}
-  async uninstall(): void {}
+  override install(): void {}
+  override start(): void {}
+  override stop(): void {}
+  override uninstall(): void {}
 }
 ```
+
+**插件定义处理方法**
+
+PluginModule 自动识别插件类中所有的公开方法，并获取jsDoc中标注的注入点，并将其与插件方法绑定。EventManager 会根据注入点调度活动，传入的参数有差异。但接口定义是相同的
+
+```typescript
+interface ExecuteEvent {
+  name: EventInjectMethod;
+  args: any[];
+}
+```
+
+- `name`: 活动名称
+- `args`: 活动参数，参数格式参考 执行传入 args 类型 的说明。
+
+```typescript
+class TestPlugin extends Plugin {
+  /**
+   * @Inject EventInjectMethod.POST_CREATE, EventInjectMethod.POST_CREATE
+   */
+  public async requestWebHooks(args) {
+    reg(args.text);
+  }
+  private async reg(str) {}
+}
+```
+
+**执行传入 args 类型**
+
+- **Posts** 模块: Return `PostModel[] | PostModel`
+- **Pages** 模块: Return `PageModel[] | PageModel`
+- **Category** 模块: Return `CategoryModel[] | CategoryModel`
+- **Links** 模块: Return `LinkModel[] | LinkModel`
+- **Comments** 模块: Return `CommentModel[] | CommentModel`
 
 ### 后台
 

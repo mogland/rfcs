@@ -3,7 +3,7 @@
 - 创建日期: (开始撰写的日期, YYYY-MM-DD)
 - 目标完成版本: (2.x)
 - 参考问题: (如果有，填写现有相关问题)
-- 当前状态：WIP / In-View / Approved / Obsolete
+- 当前状态：Pending / Active / Landed / Rejected
 - 所有者：*是谁开启这篇文章的？留下联系方式*
 
 # Summary 概要

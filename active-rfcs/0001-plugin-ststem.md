@@ -120,10 +120,10 @@ pluginSignKey: org.wibuswee.plugin.tests
 
 **Plugin Name 命名**
 
-遵循**大驼峰式命名法**进行命名，使用数字标识时需要使用下划线进行分隔
-专有名词按照官方写法书写
+遵循**大驼峰式命名法**进行命名，使用数字标识时需要使用下划线进行分隔，专有名词按照官方写法书写，若该插件开源，仓库命名可以加上 `nx-plugin-*` 标识，系统内部则使用其中的 `*`
 
-例：`ThisIsAPlugin`, `Json_2_CSV`
+- 仓库 `nx-plugin-ThisIsAPlugin`，内部 `ThisIsAPlugin`
+- 仓库 `nx-plugin-Json_2_CSV`，内部 ``Json_2_CSV``
 
 **plugin_sign_key 命名规则**
 

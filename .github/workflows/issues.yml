@@ -7,7 +7,7 @@ on:
 jobs:
 # feature-request, bug, duplicate, invalid, not-belong
   auto-create-feature-label:
-    if: contains(github.event.comment.body, '/label feature') == true && contains(github.event.comment.body, repository_owner) == true
+    if: contains(github.event.comment.body, '/label feature') == true
     runs-on: ubuntu-latest
     steps:
       - name: Add labels
@@ -18,7 +18,7 @@ jobs:
           issue-number: ${{ github.event.issue.number }}
           labels: "feature-request, enhancement"
   auto-create-lgtm-label:
-    if: contains(github.event.comment.body, '/lgtm') == true && contains(github.event.comment.body, repository_owner) == true
+    if: contains(github.event.comment.body, '/lgtm') == true
     runs-on: ubuntu-latest
     steps:
       - name: Add labels
@@ -38,7 +38,7 @@ jobs:
           body: |
             Hello ${{ github.event.issue.user.login }}. 你的 RFC 已标记为 LGTM. 请等待管理员合并您的 RFC.
   auto-create-rfc-label:
-    if: contains(github.event.comment.body, '/rfc') == true && contains(github.event.comment.body, repository_owner) == true
+    if: contains(github.event.comment.body, '/rfc') == true
     runs-on: ubuntu-latest
     steps:
       - name: Add labels
@@ -51,7 +51,7 @@ jobs:
 
 
   auto-create-duplicate-label:
-    if: contains(github.event.comment.body, '/label duplicate') == true && contains(github.event.comment.body, repository_owner) == true
+    if: contains(github.event.comment.body, '/label duplicate') == true
     runs-on: ubuntu-latest
     steps:
       - name: Add labels
@@ -62,7 +62,7 @@ jobs:
           issue-number: ${{ github.event.issue.number }}
           labels: "duplicate"
   auto-create-invalid-label:
-    if: contains(github.event.comment.body, '/label invalid') == true && contains(github.event.comment.body, repository_owner) == true
+    if: contains(github.event.comment.body, '/label invalid') == true
     runs-on: ubuntu-latest
     steps:
       - name: Add labels

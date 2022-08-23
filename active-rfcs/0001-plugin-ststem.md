@@ -2,7 +2,7 @@
 
 - 创建日期: 2022-08-23
 - 目标完成版本: 2.x
-- 参考问题: https://github.com/nx-space/core/issues/176, https://github.com/nx-space/core/issues/196, https://github.com/nx-space/core/issues/222, https://github.com/nx-space/core/issues/211
+- 参考问题: https://github.com/nx-space/core/issues/176, https://github.com/nx-space/core/issues/196, https://github.com/nx-space/core/issues/222, https://github.com/nx-space/core/issues/211, https://github.com/nx-space/rfcs/issues/3
 - 当前状态：Pending
 - 所有者：_wibus <wibus@qq.com>_
 

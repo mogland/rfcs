@@ -64,13 +64,12 @@ export default class MyPlugin extends Plugin {
 ## 术语
 
 - **Inject Point**
-
   - 可扩展功能的方法接口扩展注入点。
   - 注入点应该处于基本处理 --> 输出处理结果之间应用。
   - 注入点无法脱离基本处理方法单独执行，仅作为功能上的补充，对于扩展点的配置将会独立放入 Configs 表中的 plugin 字段。
   - 注入点中载入的处理方法间应看情况建立无/依赖/冲突关系。
   - 注入点载入的处理方法应当按照插件被激活时间倒序排列处理。
-
+  
 - **Plugin**
   - Inject Point（扩展注入点）的应用方法。
   - 对其中的处理方法应当更加精细区分，达到禁用/启动某一功能的程度
@@ -265,7 +264,7 @@ async method(args) {
 
   使用插件签名作为路径，可以排除大小写问题，但是路径过长
 
-- [x] `/plugins/{plugin_sign_key}/{custom_router}/**`
+- [ ] `/plugins/{plugin_sign_key}/{custom_router}/**`
 
   使用插件签名作为路径，可以排除大小写问题，与上一个相比，这个接口减少了版本号的使用。如： `/api/plugins/org.nx-space.plugin.test/test_router/`
 
@@ -284,6 +283,14 @@ async method(args) {
 - [ ] `/plugins/{custom_router}/**`
 
   可行，并不建议，有可能与其他插件冲突
+  
+- [x] `/plugins/{plugin_name}/{custom_router}/**`
+
+  需评定可行性和建议程度
+  
+- [x] `/plugins/{plugin_sign_key}/{custom_router}/**`
+
+  需评定可行性和建议程度
 
 当访问到此路由时，将会访问插件配置的对应方法，返回响应头同样需要配置。使用 `@Get()` 或 `@Post()` 注解，可以指定请求方法。
 
@@ -370,4 +377,37 @@ TBD.
 - [X] 自定义模型的配置存放位置（ ~~表内~~ / 单独表 ）
 - [ ] 应该如何合理地调度活动
 - [X] 插件 API 的合理设计
-- [X] 服务端如何实现插件扩展 / 如何实现可使用的扩展点
+- [x] 服务端如何实现插件扩展 / 如何实现可使用的扩展点
+
+# Plugin相关命名规范
+
+## Plugin 命名
+
+遵循**大驼峰式命名法**进行命名，使用数字标识时需要使用下划线进行分隔
+专有名词按照官方写法书写
+
+例：
+ThisIsAPlugin
+Json_2_CSV
+
+## plugin_sign_key 命名规则
+
+该参数主要用于校验插件的重复性，保证插件的唯一性
+
+规则：
+
+全部采用小写标识，依照 `pluginname.authorname_version` 标识进行书写
+若 `authorname` 或者 `pluginname` 由多个单词构成，请采用小写忽略空格拼在一起，版本号采用**x.y.z格式**进行标准
+
+例：
+插件名称：Auto Mail Send
+作者名称：John Han
+版本号：1.12.4
+该插件的 plugin_sign_key 为 automailsend.johnhan_v.1.12.4
+
+名称可以依据作者喜好进行缩短，以上方插件继续举例：
+缩减后的相关内容为：
+插件名称：Amail
+作者名称：Han
+版本号不变
+该插件缩减之后的 plugin_sign_key 为 amail.han_v.1.12.4

@@ -12,10 +12,10 @@
 
 一个 RFC 经历以下阶段：
 
-- **Pending：**当 RFC 作为 PR 提交时。
-- **Active：**当 RFC PR 被合并并正在实施时。
-- **Landed：**当 RFC 提议的更改在实际版本中发布时。
-- **Rejected：**当一个 RFC PR 被关闭而不被合并时。
+- **Pending：** 当 RFC 作为 PR 提交时。
+- **Active：** 当 RFC PR 被合并并正在实施时。
+- **Landed：** 当 RFC 提议的更改在实际版本中发布时。
+- **Rejected：** 当一个 RFC PR 被关闭而不被合并时。
 
 [待处理的 RFC 列表](https://github.com/nx-space/rfcs/pulls)
 

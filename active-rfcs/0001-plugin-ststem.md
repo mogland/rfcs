@@ -1,11 +1,11 @@
 # 插件系统
 
-| 创建日期     | 2022-08-23                                                   |
-| ----------------- | ------------------------------------------- |
-| 目标完成版本 | 2.x                                                          |
+| 创建日期     | 2022-08-23                                                                                                                            |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------- |
+| 目标完成版本 | 2.x                                                                                                                                   |
 | 参考问题:    | https://github.com/nx-space/core/issues/176, https://github.com/nx-space/core/issues/196, https://github.com/nx-space/core/issues/222 |
-| 当前状态     | Pending                                                      |
-| 所有者       | wibus <wibus@qq.com>                                         |
+| 当前状态     | Pending                                                                                                                               |
+| 所有者       | wibus <wibus@qq.com>                                                                                                                  |
 
 # Summary 概要
 
@@ -69,7 +69,6 @@ export default class MyPlugin extends Plugin {
   - 注入点无法脱离基本处理方法单独执行，仅作为功能上的补充，对于扩展点的配置将会独立放入 Configs 表中的 plugin 字段。
   - 注入点中载入的处理方法间应看情况建立无/依赖/冲突关系。
   - 注入点载入的处理方法应当按照插件被激活时间倒序排列处理。
-  
 - **Plugin**
   - Inject Point（扩展注入点）的应用方法。
   - 对其中的处理方法应当更加精细区分，达到禁用/启动某一功能的程度
@@ -131,7 +130,7 @@ pluginSignKey: org.wibuswee.plugin.tests
 该参数主要用于校验插件的重复性，保证插件的唯一性
 
 规则：全部采用小写标识，依照 `pluginname.authorname_version` 标识进行书写
-若 `authorname` 或者 `pluginname` 由多个单词构成，请采用小写忽略空格拼在一起，版本号采用**x.y.z格式**进行标准
+若 `authorname` 或者 `pluginname` 由多个单词构成，请采用小写忽略空格拼在一起，版本号采用**x.y.z 格式**进行标准
 
 例：
 
@@ -319,11 +318,11 @@ async method(args) {
 - [ ] `/plugins/{custom_router}/**`
 
   可行，并不建议，有可能与其他插件冲突
-  
+
 - [x] `/plugins/{plugin_name}/{custom_router}/**`
 
   需评定可行性和建议程度
-  
+
 - [x] `/plugins/{plugin_sign_key}/{custom_router}/**`
 
   需评定可行性和建议程度
@@ -410,7 +409,7 @@ TBD.
 
 # Unresolved questions 未解决的问题
 
-- [X] 自定义模型的配置存放位置（ ~~表内~~ / 单独表 ）
+- [x] 自定义模型的配置存放位置（ ~~表内~~ / 单独表 ）
 - [ ] 应该如何合理地调度活动
-- [X] 插件 API 的合理设计
+- [x] 插件 API 的合理设计
 - [x] 服务端如何实现插件扩展 / 如何实现可使用的扩展点

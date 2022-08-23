@@ -56,9 +56,12 @@
 
 ## 如何贡献 RFC
 
-1. 根据此 repo 中的模板 （`0000-template.md`）撰写新的功能提案，然后对此仓库发起 PR
+1. 根据此 repo 中的模板 （`0000-template.md`）撰写新的功能提案，然后对此仓库发起 PR， PR的格式为 `[rfc-number] feat/performance: title`，比如： `[0001] feat: plugin system`
    - 注意细节信息：**没有提供令人信服的动机、展示对设计影响的理解或对缺点或替代方案不现实的 RFC 通常不受欢迎**。
    - 记得总结好你的提案内容，凝聚成为讨论 与 PR 的标题
+   - 专题专用，不要在一个 PR 里同时处理两件事情！（笔误除外）
+   - 遵循模板，不按规则办事的一律否决
+   - 不要占用空的编号，有可能它们是有意留下的！
 2. 在[ Issues ](https://github.com/nx-space/rfcs/issues)中打开一个新的议题，并且将 Label 设置为 “rfc”，其他 Label 交给核心团队操作
 
 ## 实施 RFC

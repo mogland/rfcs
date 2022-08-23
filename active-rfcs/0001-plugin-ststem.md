@@ -119,6 +119,42 @@ pluginSignKey: org.wibuswee.plugin.tests
 - `pluginSignKey`: 识别插件的唯一密钥，防止出现同名插件问题
 - `description`: 详细介绍[可选]。
 
+**Plugin Name 命名**
+
+遵循**大驼峰式命名法**进行命名，使用数字标识时需要使用下划线进行分隔
+专有名词按照官方写法书写
+
+例：`ThisIsAPlugin`, `Json_2_CSV`
+
+**plugin_sign_key 命名规则**
+
+该参数主要用于校验插件的重复性，保证插件的唯一性
+
+规则：全部采用小写标识，依照 `pluginname.authorname_version` 标识进行书写
+若 `authorname` 或者 `pluginname` 由多个单词构成，请采用小写忽略空格拼在一起，版本号采用**x.y.z格式**进行标准
+
+例：
+
+> 插件名称：Auto Mail Send
+>
+> 作者名称：John Han
+>
+> 版本号：1.12.4
+
+该插件的 plugin_sign_key 为 `automailsend.johnhan_v.1.12.4`
+
+名称可以依据作者喜好进行缩短，以上方插件继续举例：
+
+缩减后的相关内容为：
+
+> 插件名称：Amail
+>
+> 作者名称：Han
+>
+> 版本号不变
+
+该插件缩减之后的 plugin_sign_key 为 `amail.han_v.1.12.4`
+
 **版本号规范**
 
 | Code status                               | Stage         | Rule                                         | Example version |
@@ -378,36 +414,3 @@ TBD.
 - [ ] 应该如何合理地调度活动
 - [X] 插件 API 的合理设计
 - [x] 服务端如何实现插件扩展 / 如何实现可使用的扩展点
-
-# Plugin相关命名规范
-
-## Plugin 命名
-
-遵循**大驼峰式命名法**进行命名，使用数字标识时需要使用下划线进行分隔
-专有名词按照官方写法书写
-
-例：
-ThisIsAPlugin
-Json_2_CSV
-
-## plugin_sign_key 命名规则
-
-该参数主要用于校验插件的重复性，保证插件的唯一性
-
-规则：
-
-全部采用小写标识，依照 `pluginname.authorname_version` 标识进行书写
-若 `authorname` 或者 `pluginname` 由多个单词构成，请采用小写忽略空格拼在一起，版本号采用**x.y.z格式**进行标准
-
-例：
-插件名称：Auto Mail Send
-作者名称：John Han
-版本号：1.12.4
-该插件的 plugin_sign_key 为 automailsend.johnhan_v.1.12.4
-
-名称可以依据作者喜好进行缩短，以上方插件继续举例：
-缩减后的相关内容为：
-插件名称：Amail
-作者名称：Han
-版本号不变
-该插件缩减之后的 plugin_sign_key 为 amail.han_v.1.12.4

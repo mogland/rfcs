@@ -313,6 +313,32 @@ TBD.
 
 TBD.
 
+**插件文件结构**
+
+```
+wibus-wee/Test
+├── LICENSE
+├── README.md
+├── src
+│   └── index.ts
+├── dist
+│   ├── index.js
+│   └── manifest.yml
+└── manifest.yml
+```
+
+- 如果在 `manifest.yml` 中没有指定 pluginSignKey，则会自动生成一个, 如 `org.wibuswee.plugin.test`，并储存在 `manifest.yml` 中。
+- 如果出现同名插件，若 pluginSignKey 不相同，则同样会进行加载，但会提示用户出现昵称冲突。
+- 若插件的信息全部相同，则会默认使用版本号更新的一者，将旧版本文件删除。
+
+**如何开发插件**
+
+TBD.
+
+**如何调试插件**
+
+TBD.
+
 ### 后台
 
 TBD.

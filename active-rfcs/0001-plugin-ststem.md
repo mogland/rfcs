@@ -343,6 +343,8 @@ TBD.
 
 ### 后台
 
+考虑使用 React 作为后台的框架，需要保证插件的技术栈是 React.
+
 TBD.
 
 # Drawbacks 缺点

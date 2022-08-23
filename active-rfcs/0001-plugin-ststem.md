@@ -301,6 +301,8 @@ class TestPlugin extends Plugin {
 }
 ```
 
+> 此处的装饰器并非来自于 nestjs，而是 NEXT 额外提供的插件库。
+
 **插件依赖库**
 
 暂时不实现，考虑让开发者打包编译进入 js 文件

@@ -4,7 +4,7 @@
 - 目标完成版本: 2.x
 - 参考问题: https://github.com/nx-space/core/issues/176, https://github.com/nx-space/core/issues/196, https://github.com/nx-space/core/issues/222, https://github.com/nx-space/core/issues/211
 - 当前状态：Pending
-- 所有者：*wibus <wibus@qq.com>*
+- 所有者：_wibus <wibus@qq.com>_
 
 # Summary 概要
 
@@ -33,13 +33,13 @@
 
 > ⚠️ 此提案的插件系统，并不属于模块插件化，模块插件化并未开始考虑
 
-# Basic example 
+# Basic example
 
 ```js
-import { Plugin } from '@nx-space/plugin-system';
+import { Plugin } from "@nx-space/plugin-system";
 
 export default class MyPlugin extends Plugin {
- // ...
+  // ...
 }
 ```
 
@@ -53,7 +53,7 @@ export default class MyPlugin extends Plugin {
 - 实现核心团队并不打算实现的功能
 - 集成统计系统至前端、私有文章的特殊处理、可移植到各处的功能
 - 后台文章管理功能增强、后台编辑器进化
-- 使用微信或QQ等工具管理后台
+- 使用微信或 QQ 等工具管理后台
 - 文章可以在服务端实现短代码解析
 - 发生操作活动时，可以请求 webhook url
 
@@ -103,7 +103,7 @@ description: Description
 version: 0.0.1
 author: "?"
 require: ">=1.5.3" # 最大支持的后端版本
-dependencies: 
+dependencies:
   - Test-2: "1.0.0"
 homepage: "?"
 displayName: "?"
@@ -130,8 +130,6 @@ async method(args) {
 }
 ```
 
-
-
 **版本号规范**
 
 | Code status                               | Stage         | Rule                                         | Example version |
@@ -145,7 +143,65 @@ async method(args) {
 
 TBD.
 
+**在 EventManager 中插件生命周期**
 
+EventManager 需要考虑到安装时插件额外的的验证函数、激活函数，再将插件加载至 NEXT 中。
+
+它具有以下生命周期：
+
+- `INSTALLED`: 安装时
+- `RESOLVED`: 解析完成后
+- `STARTING`: 启动时
+- `ACTIVE`: 激活时
+- `STOPPING`: 停止时
+- `UNINSTALLED`: 卸载后
+
+最后需要冻结枚举类型，不能添加新的值。
+
+```typescript
+class PluginState {
+  constructor(state) {
+    this.state = state;
+    Object.freeze(this);
+  }
+
+  static INSTALLED = new PluginState("INSTALLED");
+  static RESOLVED = new PluginState("RESOLVED");
+  static STARTING = new PluginState("STARTING");
+  static ACTIVE = new PluginState("ACTIVE");
+  static STOPPING = new PluginState("STOPPING");
+  static UNINSTALLED = new PluginState("UNINSTALLED");
+
+  static values = function () {
+    const enumValues = [];
+    enumValues.push(PluginState.INSTALLED);
+    enumValues.push(PluginState.RESOLVED);
+    enumValues.push(PluginState.STARTING);
+    enumValues.push(PluginState.STOPPING);
+    enumValues.push(PluginState.ACTIVE);
+    enumValues.push(PluginState.UNINSTALLED);
+    return enumValues;
+  };
+}
+
+Object.freeze(PluginState);
+```
+
+**在插件中的插件生命周期**
+
+插件的生命周期是从插件安装时开始，到插件卸载时结束。只需要 `start`, `stop`, `install`, `uninstall` 四个方法即可。
+
+```typescript
+class TestPlugin extends Plugin {
+  constructor(options) {
+    super(options);
+  }
+  async install(): void {}
+  async start(): void {}
+  async stop(): void {}
+  async uninstall(): void {}
+}
+```
 
 ### 后台
 

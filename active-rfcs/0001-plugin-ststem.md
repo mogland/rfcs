@@ -226,14 +226,30 @@ class TestPlugin extends Plugin {
 
 ```ts
 @Get("/")
-@EventInject() // I'm here
+@EventInject(EventInjectMethod[A_KEY]) // I'm here
 async method(args) {
   return this.service.method(args);
 }
 ```
 
+#### 插件公开 API
 
+插件并不局限于服务端处理中，但是对 API 的设计也应该慎重，避免暴露给客户端的 API 可能会导致客户端恶意调用。尽量遵守 RESTFul 规范。
 
+以下是 API 路由的几种设计，每种设计都有优缺点：
+
+- [ ] `/plugins/{plugin_name}/{version}/{custom_router}/**`
+      使用插件名字、版本号、与插件定义的路由作为路径，但是有可能会出现插件大小写问题
+- [ ] `/plugins/{plugin_sign_key}/{version}/{custom_router}/**`
+      使用插件签名作为路径，可以排除大小写问题，但是路径过长
+- [ ] `/{plugin_name}/{version}/{custom_router}/**`
+      直接放置至 Root Router，有可能会与根路由冲突
+- [ ] `/{plugin_sign_key}/{version}/{custom_router}/**`
+      个人认为是一种较为理想的实现方式
+- [ ] `/{custom_router}/**`
+      可行，并不建议，不仅有可能与原路由冲突，甚至有可能与其他插件冲突
+- [ ] `/plugins/{custom_router}/**`
+      可行，并不建议，有可能与其他插件冲突
 
 ### 后台
 
@@ -249,5 +265,6 @@ TBD.
 # Unresolved questions 未解决的问题
 
 - [ ] 自定义模型的配置存放位置（表内/单独表）
+- [ ] 应该如何合理地调度活动
 - [ ] 插件 API 的合理设计
 - [ ] 服务端如何实现插件扩展 / 如何实现可使用的扩展点

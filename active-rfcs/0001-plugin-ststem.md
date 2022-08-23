@@ -1,4 +1,4 @@
-# RFC: 插件系统
+# 插件系统
 
 - 创建日期: 2022-08-23
 - 目标完成版本: 2.x
@@ -257,6 +257,10 @@ async method(args) {
 - [ ] `/plugins/{plugin_sign_key}/{version}/{custom_router}/**`
 
   使用插件签名作为路径，可以排除大小写问题，但是路径过长
+
+- [ ] `/plugins/{plugin_sign_key}/{custom_router}/**`
+
+  使用插件签名作为路径，可以排除大小写问题，与上一个相比，这个接口减少了版本号的使用。如： `/api/plugins/org.nx-space.plugin.test/test_router/`
 
 - [ ] `/{plugin_name}/{version}/{custom_router}/**`
 

@@ -74,10 +74,6 @@ export default class MyPlugin extends Plugin {
   - 对其中的处理方法应当更加精细区分，达到禁用/启动某一功能的程度
   - 激活依赖方法的控制权、插件依赖模块加载权交由用户
   - 插件应支持自己的独立模型进行配置
-- **Method: **
-  - Active Method：激活某一方法
-  - UnActive Method：禁用某一方法
-  - Reload Method：重载某一方法
 
 ## 后端
 

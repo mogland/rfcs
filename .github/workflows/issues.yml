@@ -1,0 +1,63 @@
+name: Comment Label Manager
+
+on:
+  issue_comment:
+    types: [created, edited]
+
+jobs:
+# feature-request, bug, duplicate, invalid, not-belong
+  auto-create-feature-label:
+    if: contains(github.event.comment.body, '/label feature') == true && contains(github.event.comment.body, repository_owner) == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add labels
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: "add-labels"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.issue.number }}
+          labels: "feature-request, enhancement"
+  auto-create-lgtm-label:
+    if: contains(github.event.comment.body, '/lgtm') == true && contains(github.event.comment.body, repository_owner) == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add labels
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: "add-labels"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.issue.number }}
+          labels: "lgtm" 
+
+      - name: Create comment
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: 'create-comment'
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.issue.number }}
+          body: |
+            Hello ${{ github.event.issue.user.login }}. 你的 RFC 已标记为 LGTM. 请等待管理员合并您的 RFC.
+
+
+  auto-create-duplicate-label:
+    if: contains(github.event.comment.body, '/label duplicate') == true && contains(github.event.comment.body, repository_owner) == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add labels
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: "add-labels"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.issue.number }}
+          labels: "duplicate"
+  auto-create-invalid-label:
+    if: contains(github.event.comment.body, '/label invalid') == true && contains(github.event.comment.body, repository_owner) == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add labels
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: "add-labels"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.issue.number }}
+          labels: "*invalid"

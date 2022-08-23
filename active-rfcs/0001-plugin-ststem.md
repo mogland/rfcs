@@ -2,7 +2,7 @@
 
 - 创建日期: 2022-08-23
 - 目标完成版本: 2.x
-- 参考问题: https://github.com/nx-space/core/issues/176, https://github.com/nx-space/core/issues/196, https://github.com/nx-space/core/issues/222, https://github.com/nx-space/core/issues/211, https://github.com/nx-space/rfcs/issues/3
+- 参考问题: https://github.com/nx-space/core/issues/176, https://github.com/nx-space/core/issues/196, https://github.com/nx-space/core/issues/222
 - 当前状态：Pending
 - 所有者：_wibus <wibus@qq.com>_
 
@@ -63,11 +63,13 @@ export default class MyPlugin extends Plugin {
 ## 术语
 
 - **Inject Point**
+
   - 可扩展功能的方法接口扩展注入点。
   - 注入点应该处于基本处理 --> 输出处理结果之间应用。
   - 注入点无法脱离基本处理方法单独执行，仅作为功能上的补充，对于扩展点的配置将会独立放入 Configs 表中的 plugin 字段。
   - 注入点中载入的处理方法间应看情况建立无/依赖/冲突关系。
   - 注入点载入的处理方法应当按照插件被激活时间倒序排列处理。
+
 - **Plugin**
   - Inject Point（扩展注入点）的应用方法。
   - 对其中的处理方法应当更加精细区分，达到禁用/启动某一功能的程度
@@ -166,8 +168,6 @@ EventManager --> 收到活动调度
 从运行时全局变量获取支持此活动且已被激活的的插件 --> 获取函数,使用safeEval执行函数,将执行结果返回响应时
 ```
 
-
-
 **活动注入**
 
 使用 `@EventInject()` 标记方法，编译时自动注入函数，装饰器应当接受一个参数，该参数是字符串，表示活动的名称，活动管理器会根据该名称调度活动。
@@ -187,7 +187,7 @@ enum EventInjectMethod {
 
 **插件定义处理方法**
 
-PluginModule 自动识别插件类中所有的公开方法，并获取jsDoc中标注的注入点，并将其与插件方法绑定。EventManager 会根据注入点调度活动，传入的参数有差异。但接口定义是相同的
+PluginModule 自动识别插件类中所有的公开方法，并获取 jsDoc 中标注的注入点，并将其与插件方法绑定。EventManager 会根据注入点调度活动，传入的参数有差异。但接口定义是相同的
 
 ```typescript
 interface ExecuteEvent {
@@ -234,22 +234,84 @@ async method(args) {
 
 #### 插件公开 API
 
+**插件管理 API**
+
+当插件被点击注册时，Core 将会为插件生成路径的 API。API 组成规则如下：
+
+```
+/plugins/{plugin_sign_key}/?action={action_name}
+```
+
+例如：`/plugins/org.wibuswee.plugin.test?action=install`。
+
+**插件自定义 API**
+
 插件并不局限于服务端处理中，但是对 API 的设计也应该慎重，避免暴露给客户端的 API 可能会导致客户端恶意调用。尽量遵守 RESTFul 规范。
 
-以下是 API 路由的几种设计，每种设计都有优缺点：
+以下是 API 自定义路由的几种设计，每种设计都有优缺点：
 
 - [ ] `/plugins/{plugin_name}/{version}/{custom_router}/**`
-      使用插件名字、版本号、与插件定义的路由作为路径，但是有可能会出现插件大小写问题
+
+  使用插件名字、版本号、与插件定义的路由作为路径，但是有可能会出现插件大小写问题, 如: `/api/plugins/test/1.0.2/test_router/`
+
 - [ ] `/plugins/{plugin_sign_key}/{version}/{custom_router}/**`
-      使用插件签名作为路径，可以排除大小写问题，但是路径过长
+
+  使用插件签名作为路径，可以排除大小写问题，但是路径过长
+
 - [ ] `/{plugin_name}/{version}/{custom_router}/**`
-      直接放置至 Root Router，有可能会与根路由冲突
+
+  直接放置至 Root Router，有可能会与根路由冲突
+
 - [ ] `/{plugin_sign_key}/{version}/{custom_router}/**`
-      个人认为是一种较为理想的实现方式
+
+  个人认为是一种较为理想的实现方式，但是与 NestJS 思想并不相符
+
 - [ ] `/{custom_router}/**`
-      可行，并不建议，不仅有可能与原路由冲突，甚至有可能与其他插件冲突
+
+  可行，并不建议，不仅有可能与原路由冲突，甚至有可能与其他插件冲突
+
 - [ ] `/plugins/{custom_router}/**`
-      可行，并不建议，有可能与其他插件冲突
+
+  可行，并不建议，有可能与其他插件冲突
+
+当访问到此路由时，将会访问插件配置的对应方法，返回响应头同样需要配置。使用 `@Get()` 或 `@Post()` 注解，可以指定请求方法。
+
+```typescript
+class TestPlugin extends Plugin {
+  @Get("/test")
+  public async test(
+    @Query() query: any,
+    @Body() body: any,
+    @Param() param: any,
+    @Header() header: any,
+    @Cookie() cookie: any,
+    @Req() req: any,
+    @Res() res: any
+  ) {
+    return {
+      query,
+      body,
+      param,
+      header,
+      cookie,
+      req,
+      res,
+    };
+  }
+}
+```
+
+**插件依赖库**
+
+暂时不实现，考虑让开发者打包编译进入 js 文件
+
+TBD.
+
+**插件更新机制**
+
+暂时不实现，考虑通过卸载替换安装方式
+
+TBD.
 
 ### 后台
 

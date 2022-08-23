@@ -52,7 +52,6 @@ export default class MyPlugin extends Plugin {
 - 使用 **MWeb** 等编辑器推送文章
 - 实现核心团队并不打算实现的功能
 - 集成统计系统至前端、私有文章的特殊处理、可移植到各处的功能
-- 后台文章管理功能增强、后台编辑器进化
 - 使用微信或 QQ 等工具管理后台
 - 文章可以在服务端实现短代码解析
 - 发生操作活动时，可以请求 webhook url
@@ -118,18 +117,6 @@ pluginSignKey: org.wibuswee.plugin.tests
 - `pluginSignKey`: 识别插件的唯一密钥，防止出现同名插件问题
 - `description`: 详细介绍[可选]。
 
-**启动注入点**
-
-注入装饰器应当处于控制器方法之上：
-
-```ts
-@Get("/")
-@EventInject() // I'm here
-async method(args) {
-  return this.service.method(args);
-}
-```
-
 **版本号规范**
 
 | Code status                               | Stage         | Rule                                         | Example version |
@@ -143,21 +130,14 @@ async method(args) {
 
 TBD.
 
-**活动注入**
+#### 主模块
 
-使用 `@EventInject()` 标记方法，编译时自动注入函数，装饰器应当接受一个参数，该参数是字符串，表示活动的名称，活动管理器会根据该名称调度活动。
-
-```typescript
-enum EventInjectMethod {
-  GET_REQUEST = "request", // 接受请求时
-  PUSH_RESPONSE = "response", // 发送响应时
-  POST_CREATE = "create:post", // 在创建文章时调用
-  POST_UPDATE = "update:post", // 在更新文章时调用
-  POST_DELETE = "delete:post", // 在删除文章时调用
-  POST_FIND = "find:post", // 在查询文章时调用
-  PAGE_CREATE = "create:page", // 在创建页面时调用
-  // ...
-}
+```mermaid
+flowchart TD;
+PluginModule --> 初始化模块
+初始化模块 --> 读取数据库中插件的启动情况,写入process.env
+PluginModule --> 注册插件
+注册插件 --> 执行生命周期函数,将数据更新写入数据库和process.env
 ```
 
 **在插件中的插件生命周期**
@@ -173,6 +153,35 @@ class TestPlugin extends Plugin {
   override start(): void {}
   override stop(): void {}
   override uninstall(): void {}
+}
+```
+
+#### 活动经理
+
+```mermaid
+flowchart TD;
+EventManager --> 收到活动调度
+收到活动调度 --> 获取活动名称
+获取活动名称 --> 从运行时全局变量获取支持此活动且已被激活的的插件
+从运行时全局变量获取支持此活动且已被激活的的插件 --> 获取函数,使用safeEval执行函数,将执行结果返回响应时
+```
+
+
+
+**活动注入**
+
+使用 `@EventInject()` 标记方法，编译时自动注入函数，装饰器应当接受一个参数，该参数是字符串，表示活动的名称，活动管理器会根据该名称调度活动。
+
+```typescript
+enum EventInjectMethod {
+  GET_REQUEST = "request", // 接受请求时
+  PUSH_RESPONSE = "response", // 发送响应时
+  POST_CREATE = "create:post", // 在创建文章时调用
+  POST_UPDATE = "update:post", // 在更新文章时调用
+  POST_DELETE = "delete:post", // 在删除文章时调用
+  POST_FIND = "find:post", // 在查询文章时调用
+  PAGE_CREATE = "create:page", // 在创建页面时调用
+  // ...
 }
 ```
 
@@ -210,6 +219,21 @@ class TestPlugin extends Plugin {
 - **Category** 模块: Return `CategoryModel[] | CategoryModel`
 - **Links** 模块: Return `LinkModel[] | LinkModel`
 - **Comments** 模块: Return `CommentModel[] | CommentModel`
+
+**启动注入点**
+
+注入装饰器应当处于控制器方法之上：
+
+```ts
+@Get("/")
+@EventInject() // I'm here
+async method(args) {
+  return this.service.method(args);
+}
+```
+
+
+
 
 ### 后台
 

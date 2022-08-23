@@ -193,7 +193,8 @@ interface ExecuteEvent {
 ```typescript
 class TestPlugin extends Plugin {
   /**
-   * @Inject EventInjectMethod.POST_CREATE, EventInjectMethod.POST_CREATE
+   * @Inject create:posts
+   * @Inject update:posts
    */
   public async requestWebHooks(args) {
     reg(args.text);

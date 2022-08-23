@@ -1,10 +1,11 @@
 # 插件系统
 
-- 创建日期: 2022-08-23
-- 目标完成版本: 2.x
-- 参考问题: https://github.com/nx-space/core/issues/176, https://github.com/nx-space/core/issues/196, https://github.com/nx-space/core/issues/222
-- 当前状态：Pending
-- 所有者：_wibus <wibus@qq.com>_
+| 创建日期     | 2022-08-23                                                   |
+| ----------------- | ------------------------------------------- |
+| 目标完成版本 | 2.x                                                          |
+| 参考问题:    | https://github.com/nx-space/core/issues/176, https://github.com/nx-space/core/issues/196, https://github.com/nx-space/core/issues/222 |
+| 当前状态     | Pending                                                      |
+| 所有者       | wibus <wibus@qq.com>                                         |
 
 # Summary 概要
 

@@ -37,6 +37,17 @@ jobs:
           issue-number: ${{ github.event.issue.number }}
           body: |
             Hello ${{ github.event.issue.user.login }}. 你的 RFC 已标记为 LGTM. 请等待管理员合并您的 RFC.
+  auto-create-rfc-label:
+    if: contains(github.event.comment.body, '/rfc') == true && contains(github.event.comment.body, repository_owner) == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add labels
+        uses: actions-cool/issues-helper@v3
+        with:
+          actions: "add-labels"
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.issue.number }}
+          labels: "rfc"
 
 
   auto-create-duplicate-label:

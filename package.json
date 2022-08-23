@@ -1,0 +1,23 @@
+{
+  "name": "@nx-space/rfcs",
+  "version": "0.0.0",
+  "description": "",
+  
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "scripts": {
+    "lint-staged": "markdownlint-cli2 '**/*.md' '#node_modules'",
+    "prepare": "husky install"
+  },
+  "keywords": [],
+  "author": "nx-space",
+  "license": "ISC",
+  "devDependencies": {
+    "husky": "^8.0.1",
+    "markdownlint": "^0.26.2",
+    "markdownlint-cli2": "^0.5.1"
+  }
+}

@@ -325,7 +325,7 @@ async method(args) {
 
   使用插件名字、版本号、与插件定义的路由作为路径，但是有可能会出现插件大小写问题, 如: `/api/plugins/test/1.0.2/test_router/`
 
-- [x] `/plugins/{plugin_name}/{custom_router}/**`
+- [ ] `/plugins/{plugin_name}/{custom_router}/**`
 
   需评定可行性和建议程度, 与上一个相比，这个接口减少了版本号的使用
 
@@ -333,7 +333,7 @@ async method(args) {
 
   使用插件签名作为路径，可以排除大小写问题，但是路径过长
 
-- [ ] `/plugins/{plugin_sign_key}/{custom_router}/**`
+- [X] `/plugins/{plugin_sign_key}/{custom_router}/**`
 
   使用插件签名作为路径，可以排除大小写问题，与上一个相比，这个接口减少了版本号的使用。如： `/api/plugins/wibus-wee.test.nx/test_router/`
 

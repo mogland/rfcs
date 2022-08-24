@@ -325,13 +325,17 @@ async method(args) {
 
   使用插件名字、版本号、与插件定义的路由作为路径，但是有可能会出现插件大小写问题, 如: `/api/plugins/test/1.0.2/test_router/`
 
+- [x] `/plugins/{plugin_name}/{custom_router}/**`
+
+  需评定可行性和建议程度, 与上一个相比，这个接口减少了版本号的使用
+
 - [ ] `/plugins/{plugin_sign_key}/{version}/{custom_router}/**`
 
   使用插件签名作为路径，可以排除大小写问题，但是路径过长
 
 - [ ] `/plugins/{plugin_sign_key}/{custom_router}/**`
 
-  使用插件签名作为路径，可以排除大小写问题，与上一个相比，这个接口减少了版本号的使用。如： `/api/plugins/org.nx-space.plugin.test/test_router/`
+  使用插件签名作为路径，可以排除大小写问题，与上一个相比，这个接口减少了版本号的使用。如： `/api/plugins/wibus-wee.test.nx/test_router/`
 
 - [ ] `/{plugin_name}/{version}/{custom_router}/**`
 
@@ -349,13 +353,6 @@ async method(args) {
 
   可行，并不建议，有可能与其他插件冲突
 
-- [x] `/plugins/{plugin_name}/{custom_router}/**`
-
-  需评定可行性和建议程度
-
-- [x] `/plugins/{plugin_sign_key}/{custom_router}/**`
-
-  需评定可行性和建议程度
 
 当访问到此路由时，将会访问插件配置的对应方法，返回响应头同样需要配置。使用 `@Get()` 或 `@Post()` 注解，可以指定请求方法。
 

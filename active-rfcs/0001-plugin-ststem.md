@@ -162,7 +162,40 @@ pluginSignKey: org.wibuswee.plugin.tests
 
 **自定义模型**
 
-TBD.
+考虑到易用性，全部自定义数据应当放在一个独立的 plugin 表中，参考 [mx-space/core](https://github.com/mx-space/core/tree/master/src/modules/serverless) 的微服务模型，模型必须要有: `key` 储存键名, `value` 储存键值
+
+让插件通过数据库获取模型数据的方式大致有两种：
+
+- [x] core 对需要使用数据的方法传入对应的模型操作方法，使用较为方便，仅需使用 jsdoc 标明即可
+- [ ] 使用命令链接 mongodb，插件可以使用/操作更多的内容，但是安全性需要考虑
+
+将定义模型的方法放置于插件类中，使用 jsdoc 标注 `@model` 在安装时将会 自动解析模型。使用 `@database` 将会在第一个参数传入 model
+
+```typescript
+class TestPlugin extends Plugin {
+  /**
+   * @model
+   */
+  public model() {
+    return [
+      { key: "webhooks", value: []},
+      { key: "requestHooks", value: true},
+    ]
+  }
+  
+  /**
+   * @database
+   */
+  public async requestWebHooks(model) {
+    if (model.requestHooks) { 
+      request.post(webhooks.[0], {body: "111"})
+      return true
+    }
+  }
+}
+```
+
+
 
 #### 主模块
 
@@ -241,9 +274,10 @@ class TestPlugin extends Plugin {
   /**
    * @Inject create:posts
    * @Inject update:posts
+   * @database
    */
-  public async requestWebHooks(args) {
-    reg(args.text);
+  public async requestWebHooks(args, model) {
+    if (model.request) reg(args.text);
   }
   private async reg(str) {}
 }
@@ -256,10 +290,6 @@ class TestPlugin extends Plugin {
 - **Category** 模块: Return `CategoryModel[] | CategoryModel`
 - **Links** 模块: Return `LinkModel[] | LinkModel`
 - **Comments** 模块: Return `CommentModel[] | CommentModel`
-
-**使用插件自定义模型**
-
-TBD.
 
 **启动注入点**
 

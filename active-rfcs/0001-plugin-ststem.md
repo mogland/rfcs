@@ -106,15 +106,14 @@ require: ">=1.5.3" # 最大支持的后端版本
 dependencies:
   - Test-2: "1.0.0"
 homepage: "?"
-displayName: "?"
 pluginSignKey: org.wibuswee.plugin.tests
 ```
 
+- `name`：插件内部名称，详细规则请见 「Plugin Name 命名」
 - `version`: 指定插件版本号
 - `requires: >=1.5.3` 表示后端版本必须大于 1.5.3
 - `pluginDependencies`: 如果依赖了其他插件则使用`pluginSignKey: version`的格式[可选]。
 - `homepage`: 插件的主页[可选]。
-- `displayName`:插件的显示名称。
 - `pluginSignKey`: 识别插件的唯一密钥，防止出现同名插件问题
 - `description`: 详细介绍[可选]。
 
@@ -129,30 +128,28 @@ pluginSignKey: org.wibuswee.plugin.tests
 
 该参数主要用于校验插件的重复性，保证插件的唯一性
 
-规则：全部采用小写标识，依照 `pluginname.authorname_version` 标识进行书写
-若 `authorname` 或者 `pluginname` 由多个单词构成，请采用小写忽略空格拼在一起，版本号采用**x.y.z 格式**进行标准
+规则：全部采用小写标识，依照 `authorName.pluginName.nx` 标识进行书写
+若 `authorname` 或者 `pluginname` 由多个单词构成，请采用小写忽略空格拼在一起，版本号采用**x.y.z 格式**
 
 例：
 
-> 插件名称：Auto Mail Send
+> 插件名称：nx-plugin-AutoMailSend
 >
 > 作者名称：John Han
 >
 > 版本号：1.12.4
 
-该插件的 plugin_sign_key 为 `automailsend.johnhan_v.1.12.4`
-
-名称可以依据作者喜好进行缩短，以上方插件继续举例：
+该插件的 plugin_sign_key 为 `automailsend.johnhan.nx`，内部名称为 `AutoMailSend` 其中名称可以依据作者喜好进行缩短，以上方插件继续举例：
 
 缩减后的相关内容为：
 
-> 插件名称：Amail
+> 插件名称：nx-plugin-Amail
 >
 > 作者名称：Han
 >
 > 版本号不变
 
-该插件缩减之后的 plugin_sign_key 为 `amail.han_v.1.12.4`
+该插件缩减之后的 plugin_sign_key 为 `amail.han.nx`，内部名称为 `Amail`
 
 **版本号规范**
 
@@ -385,7 +382,7 @@ wibus-wee/Test
 └── manifest.yml
 ```
 
-- 如果在 `manifest.yml` 中没有指定 pluginSignKey，则会自动生成一个, 如 `org.wibuswee.plugin.test`，并储存在 `manifest.yml` 中。
+- 如果在 `manifest.yml` 中没有指定 pluginSignKey，则会按照规则自动生成, 如 `wibus-wee.test.nx`，并储存在 `manifest.yml` 中。
 - 如果出现同名插件，若 pluginSignKey 不相同，则同样会进行加载，但会提示用户出现昵称冲突。
 - 若插件的信息全部相同，则会默认使用版本号更新的一者，将旧版本文件删除。
 

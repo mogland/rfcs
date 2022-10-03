@@ -19,9 +19,77 @@
 
 # Detailed design 详细设计
 
-这是RFC的大部分内容。解释设计足够的细节，让熟悉 Mog 的人理解，为熟悉的人来实现。这应该涉及到细节和极端情况，并包括如何使用该特性的示例。任何新的术语都应该在这里定义。
+## 特别功能
 
-TBD.
+因为这是一个独立的评论服务，所以我们可以在这个服务中实现一些特别的功能，比如：
+
+- 评论 Reaction 功能（点赞，踩，笑脸，哭脸，生气，惊讶等）
+- 评论短代码解析
+- 评论表情解析
+- 评论 Markdown 解析
+- ...
+
+## 评论状态
+
+```ts
+enum CommentStatus {
+  Pending = 'pending', // 待审核
+  Approved = 'approved', // 已通过
+  Spam = 'spam', // 垃圾评论
+  Trash = 'trash', // 回收站
+}
+```
+
+## 评论种类
+
+```ts
+export enum CommentType {
+  Post = 'post',
+  Page = 'page',
+}
+```
+
+## Model 数据模型
+
+- 评论者
+- 内容
+- 评论时间
+- 评论状态
+- 评论种类
+- 评论所属文章或页面
+- 评论的父子评论
+- 评论的 Reaction
+- ...
+
+## 监听活动
+
+评论服务需要监听 Mog 的活动，以便于在用户评论时，可以及时的将评论推送到评论服务中。
+
+```ts
+export enum CommentEvents {
+  CommentsGetAll = 'comments.get.all',
+  CommentsGetByPostId = 'comments.get.by.postid',
+  CommentsGetByPostIdWithMaster = 'comments.get.by.postid.auth',
+  CommentCreate = 'comment.create',
+  CommentCreateByMaster = 'comment.create.auth',
+  CommentPatch = 'comment.patch',
+  CommentDelete = 'comment.delete',
+  CommentReply = 'comment.reply',
+  CommentAddRecaction = 'comment.add.reaction',
+  CommentRemoveRecaction = 'comment.remove.reaction',
+  CommentRecactionGetList = 'comment.reaction.get.list',
+}
+```
+
+### `comments.get.all` 获取所有评论
+
+获取所有评论，它需要管理员权限，可以获取任意状态的评论。
+
+...
+
+### `comments.get.by.postid` 获取文章或页面的评论
+
+...
 
 # Drawbacks 缺点
 

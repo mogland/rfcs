@@ -25,9 +25,10 @@
 
 - 评论 Reaction 功能（点赞，踩，笑脸，哭脸，生气，惊讶等）
 - 评论短代码解析
-- 评论表情解析
+- 评论表情解析，表情默认采用 [GitHub Emoji](https://api.github.com/emojis) 或者是 [Microsoft Emoji](https://github.com/microsoft/fluentui-emoji) 支持，可采用[missive/emoji-mart](https://github.com/missive/emoji-mart) 支持库。
 - 评论 Markdown 解析
-- ...
+- 评论的部分 HTML 标签支持，Markdown 语法支持，表情拓展支持（可选择拓展图片或者颜文字）
+- 多种评论方式，多种评论展示方式，可选择单选或者多选。
 
 ## 评论状态
 
@@ -37,29 +38,59 @@ enum CommentStatus {
   Approved = 'approved', // 已通过
   Spam = 'spam', // 垃圾评论
   Trash = 'trash', // 回收站
+  Private = 'private', // 私密评论
 }
 ```
+
+|         评论状态         |                         评论状态说明                         |
+| :----------------------: | :----------------------------------------------------------: |
+| 待审核（需开启审核功能） |                评论进入后台审核，前台不做展示                |
+|          已通过          |                         正常展示评论                         |
+|         垃圾评论         | 后台对评论内容进行状态操作，评论会进入垃圾评论中，不做展示，可恢复为正常评论 |
+|          回收站          | 后台对评论进行删除，删除的评论会暂时移动至回收站，可恢复为正常评论，在指定时间之后会彻底删除，可选择暂存时间或者接删除，不进入回收站暂存 |
+|         私密评论         | 私密评论可选择以私密状态进行展示，也可以选择不展示（此种状态建议网站回复的相关通知功能完善时启用） |
+
 
 ## 评论种类
 
-```ts
-export enum CommentType {
-  Post = 'post',
-  Page = 'page',
-}
-```
+|              评论种类               |      评论种类说明      |
+| :---------------------------------: | :--------------------: |
+|               页评论                | 文章或者独立页面的评论 |
+| 段、句评论（需开启文章句段评论支持) | 指定段落或者指定句评论 |
 
 ## Model 数据模型
 
-- 评论者
-- 内容
-- 评论时间
-- 评论状态
-- 评论种类
-- 评论所属文章或页面
-- 评论的父子评论
-- 评论的 Reaction
-- ...
+数据库字段可分类为三大类：
+
+1. 评论者：昵称、邮箱、网站网址、头像、IP地址、使用浏览器、是否文章创建者（与用户系统配合使用）。
+
+   | 字段名称 |                           字段说明                           |
+   | :------: | :----------------------------------------------------------: |
+   |    id    |            唯一，字段标识符，用于定位具体评论内容            |
+   |   name   |                             昵称                             |
+   |  email   |                             邮箱                             |
+   | website  |                           网站网址                           |
+   |  avatar  | 可为空，为空状态下可选择通过邮箱检索不同头像源，若非空，则为指定链接，首次填写之后下次可为空，下次可通过数据库进行检索（暂不建议使用，规则未完善） |
+   |    ip    |                      记录评论者 IP 地址                      |
+   |  agent   |                   记录评论者浏览器相关信息                   |
+
+2. 评论属性：评论内容、评论时间、状态、种类、所属页面、所属句段。
+
+   | 字段名称  |             字段说明             |
+   | :-------: | :------------------------------: |
+   |  comment  |          评论的具体内容          |
+   |   time    | 评论的时间，以时间戳形式进行记录 |
+   |  status   |    详见 [评论状态](#评论状态)    |
+   |   kind    |    详见 [评论种类](#评论种类)    |
+   |   page    |             所属页面             |
+   | paragraph |             所属段落             |
+
+3. 交互属性：评论父子关系，评论的 Reaction。
+
+   | 字段名称 |              字段说明              |
+   | :------: | :--------------------------------: |
+   |  parent  |         评论所属的父类评论         |
+   | reaction | 数组存储，记录评论的 reaction 记录 |
 
 ## 监听活动
 
@@ -68,6 +99,8 @@ export enum CommentType {
 ```ts
 export enum CommentEvents {
   CommentsGetAll = 'comments.get.all',
+  CommentsGetWithQuery = 'comments.get.query'
+  CommentsGetJustMaster = 'comments.get.master.only'
   CommentsGetByPostId = 'comments.get.by.postid',
   CommentsGetByPostIdWithMaster = 'comments.get.by.postid.auth',
   CommentCreate = 'comment.create',
@@ -75,6 +108,7 @@ export enum CommentEvents {
   CommentPatch = 'comment.patch',
   CommentDelete = 'comment.delete',
   CommentReply = 'comment.reply',
+  CommentGet = 'comment.get',
   CommentAddRecaction = 'comment.add.reaction',
   CommentRemoveRecaction = 'comment.remove.reaction',
   CommentRecactionGetList = 'comment.reaction.get.list',
@@ -85,11 +119,33 @@ export enum CommentEvents {
 
 获取所有评论，它需要管理员权限，可以获取任意状态的评论。
 
-...
-
 ### `comments.get.by.postid` 获取文章或页面的评论
 
-...
+获取文章或页面的评论，它不需要管理员权限，只能获取已发布的评论。但是如果 headers 携带了有效的 token，那么它可以获取任意状态的评论。
+
+### `CommentsGetByPostIdWithMaster` 获取文章或页面的评论
+
+获取文章或页面的评论，它需要管理员权限，默认返回任意状态的评论。
+
+### `CommentsGetJustMaster` 获取所有作者的评论
+
+获取所有作者的评论，它不需要管理员权限。
+
+### `CommentsGetWithQuery` 获取符合条件的评论
+
+获取符合条件的评论，在一定情况下它不需要管理员权限，有部分条件需要管理员权限。
+
+## 评论方式与展示方式
+
+1. 传统文章末尾展示。
+2. 文章、页面指定句、段评论。
+
+|                   展示类型                   |                         展示类型说明                         |
+| :------------------------------------------: | :----------------------------------------------------------: |
+|   传统页末展示（建议选择文章尾部评论支持）   |                       大多数的使用场合                       |
+| 文章段、句跟随展示（需开启文章句段评论支持） | 类似于现在流行的小说软件当中的评论，可以明确地对部分句、段进行精准评论，方便知晓评论所指内容。 |
+|           弹幕展示（任选评论支持）           | 1. 文章当中使用弹幕展示（不推荐，比较影响文章观感）。<br />2. 文章、页面开头或尾部留出一定空间以弹幕的形式随机展示当前文章、页面的弹幕。<br />3. 在网站某处选择指定地点以弹幕的形式随机展示当前网站的所有评论。 |
+|   侧页评论支持（建议选择文章尾部评论支持）   | 可选择在页面侧边进行展示所有评论，适用于对于文章展示比较有要求，但是又比较希望有评论支持的网站。 |
 
 # Drawbacks 缺点
 
@@ -108,8 +164,8 @@ TBD.
 
 # Unresolved questions 未解决的问题
 
-- [ ] Model 与 Dto 的定义
+- [X] Model 与 Dto 的定义
 - [ ] 因为内存占用会变大，所以需要考虑付出与回报
-- [ ] 公开接口定义
-- [ ] 活动监听事件定义
+- [X] 公开接口定义
+- [X] 活动监听事件定义
 - [ ] 与扩展点一同考虑

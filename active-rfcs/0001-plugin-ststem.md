@@ -9,7 +9,7 @@
 
 # Summary 概要
 
-在 Mog 中实现一个类似于 Typecho, WordPress 等博客程序可热插拔的插件系统。
+在 NEXT 中实现一个类似于 Typecho, WordPress 等博客程序可热插拔的插件系统。
 
 ## 目标
 
@@ -99,6 +99,7 @@ EventManager 的实现可以参考 [minimajs](https://github.com/lorry2018/minim
 
 ```yaml
 name: Test
+area: core
 description: Description
 version: 0.0.1
 author: "?"
@@ -106,10 +107,11 @@ require: ">=1.5.3" # 最大支持的后端版本
 dependencies:
   - Test-2: "1.0.0"
 homepage: "?"
-pluginSignKey: org.wibuswee.plugin.tests
+pluginSignKey: wibus-wee.plugin.test
 ```
 
 - `name`：插件内部名称，详细规则请见 「Plugin Name 命名」
+- `area`：插件所属区域，可选值 core、admin
 - `version`: 指定插件版本号
 - `requires: >=1.5.3` 表示后端版本必须大于 1.5.3
 - `pluginDependencies`: 如果依赖了其他插件则使用`pluginSignKey: version`的格式[可选]。
@@ -128,7 +130,7 @@ pluginSignKey: org.wibuswee.plugin.tests
 
 该参数主要用于校验插件的重复性，保证插件的唯一性
 
-规则：全部采用小写标识，依照 `authorName.pluginName.nx` 标识进行书写
+规则：全部采用小写标识，依照 `authorName.pluginName.area.nx` 标识进行书写
 若 `authorname` 或者 `pluginname` 由多个单词构成，请采用小写忽略空格拼在一起，版本号采用**x.y.z 格式**
 
 例：
@@ -231,12 +233,12 @@ EventManager --> 收到活动调度
 收到活动调度 --> 获取活动名称
 获取活动名称 --> 从运行时全局变量获取支持此活动且已被激活的的插件
 从运行时全局变量获取支持此活动且已被激活的的插件 --> 获取函数,如果函数不属于写入类型的,存入all数组中 --> 将写入类型的方法按照激活顺序运行 
-获取函数,如果函数不属于写入类型的,存入all数组中 --> 其余函数则使用&nbspprocess.MogTick&nbsp+&nbspPromise.all&nbsp运行
+获取函数,如果函数不属于写入类型的,存入all数组中 --> 其余函数则使用&nbspprocess.nextTick&nbsp+&nbspPromise.all&nbsp运行
 ```
 
 原本的流程的缺点很明显，方法全部需要排序运行的，若插件数量过多，或插件内部出现错误，将会导致响应错误/堵塞。若使用 `Promise.all` 的并发执行方式，却有可能会导致数据间的不一致，最终返回的数据可能不是最终的。
 
-可以对插件进行分类，若调度方法并不是写入类型的，则将此方法放入 `Promise.all` 中执行。更者可以使用 `process.MogTick` 来执行。
+可以对插件进行分类，若调度方法并不是写入类型的，则将此方法放入 `Promise.all` 中执行。更者可以使用 `process.nextTick` 来执行。
 
 **活动注入**
 
@@ -381,7 +383,7 @@ class TestPlugin extends Plugin {
 }
 ```
 
-> 此处的装饰器并非来自于 nestjs，而是 Mog 额外提供的插件库。
+> 此处的装饰器并非来自于 nestjs，而是 NEXT 额外提供的插件库。
 
 **插件依赖库**
 
@@ -425,7 +427,43 @@ TBD.
 
 考虑使用 React 作为后台的框架，需要保证插件的技术栈是 React. 可以借鉴 [react-plugin-system](https://github.com/yuancy-code/react-plugin-system) 的实现。
 
-TBD.
+**配置定义**
+
+**manifest.yml**
+
+```yaml
+name: Vditor
+area: admin
+inject: posts:edit
+description: Description
+version: 0.0.1
+author: "?"
+require: ">=1.5.3" # 最大支持的后台版本
+homepage: "?"
+pluginSignKey: wibus-wee.plugin.test
+```
+
+与后端插件基本一致，但是取消了 `dependencies` 的配置，后台插件提供组件应当提前全部打包。除此之外，加入插件注入位置 ，位置的可选值详细在 **注入组件** 节。
+
+**获取插件列表**
+
+此处有两种方案：
+
+- [ ] 此部分则不需要 EventManager 的参与，仅需要 PluginModule 返回一个插件列表。考虑使用 apiClient 分别请求每个部件的列表，列表需要返回的内容有：`name`, `file`, `inject`，此方法需要请求时间是否会拖慢速度。
+- [ ] 此部分不需要后端的参与，当插件放入指定目录时，自动检测并启动插件，此方法并不需要通过请求时间
+
+**注入组件**
+
+目前可使用的注入点有：
+
+使用一个主组件 `<Plugin />` 代表注入点，使用 `callPlugin` 方法获取已启动的全部插件。
+
+```tsx
+const path = (callPlugin('posts:editor'));
+return <Plugin importComponent={() => { return import("@plugins/" + path)}} />
+```
+
+
 
 # Drawbacks 缺点
 

@@ -99,8 +99,8 @@ enum CommentStatus {
 ```ts
 export enum CommentEvents {
   CommentsGetAll = 'comments.get.all',
-  CommentsGetWithQuery = 'comments.get.query'
-  CommentsGetJustMaster = 'comments.get.master.only'
+  CommentsGetWithQuery = 'comments.get.query',
+  CommentsGetJustMaster = 'comments.get.master.only',
   CommentsGetByPostId = 'comments.get.by.postid',
   CommentsGetByPostIdWithMaster = 'comments.get.by.postid.auth',
   CommentCreate = 'comment.create',
@@ -156,16 +156,8 @@ export enum CommentEvents {
 
 其实本身是可以放入 core Gateway 中的，只需要做一个独立module即可，就不需要再新建多一个服务，这样反而会让内存占用变大
 
-# Adoption strategy 采用的策略
-
-如果我们实现这个提案，现有的开发者将如何使用它？这是一个突破性的变化吗？这将如何影响生态系统中的其他项目?
-
-TBD.
-
 # Unresolved questions 未解决的问题
 
 - [X] Model 与 Dto 的定义
-- [ ] 因为内存占用会变大，所以需要考虑付出与回报
 - [X] 公开接口定义
 - [X] 活动监听事件定义
-- [ ] 与扩展点一同考虑

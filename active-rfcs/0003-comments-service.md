@@ -99,8 +99,7 @@ enum CommentStatus {
    |   date    | 评论的时间，以时间戳形式进行记录 |
    |  status   |    详见 [评论状态](#评论状态)    |
    |   type    |    详见 [评论种类](#评论种类)    |
-   |   ref    |           所属页面的 id（在 Mog 模式下启动）           |
-   |   path    |           所属页面的 path（在 通用 模式下启动）           |
+   |   path    |           所属页面的 path           |
    | paragraph |             所属段落             |
 
 3. 交互属性：评论父子关系，评论的 Reaction。

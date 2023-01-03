@@ -1,11 +1,11 @@
 # 评论服务
 
-| 创建日期     | 2022-09-28                                        |
-| :-- | :-- |
-| 目标完成版本 | 2.x                                                       |
-| 参考问题    | None |
-| 当前状态     | Pending                                                      |
-| 所有者       | wibus-wee <wibus@qq.com>                 |
+| 创建日期     | 2022-09-28               |
+| :----------- | :----------------------- |
+| 目标完成版本 | 2.x                      |
+| 参考问题     | None                     |
+| 当前状态     | Active                   |
+| 所有者       | wibus-wee <wibus@qq.com> |
 
 # Summary 概要
 
@@ -19,15 +19,20 @@
 
 # Detailed design 详细设计
 
-## ~~模式区分~~
+## ~~模式区分~~ [declared]
+
+<details>
 
 ~~Mog 自己希望采用的文章、子评论关联是基于文章或评论的 ref id 的，评论问题不大，但是文章的话这意味着要建立关联，需要数据库也存在这个文章表，表里面有对应 id 的这个文章，但很明显，在 hexo 里面这是不可行的。~~
 
 ~~为了兼容如 hexo 等博客系统去调用，我们需要做出两种模式~~
 
-由于防止增加心智负担，最终仅保留一种储存方式，即记录path作为评论定位方式。
+~~由于防止增加心智负担，最终仅保留一种储存方式，即记录path作为评论定位方式。~~
 
-仿照其他评论系统的模式，记录下此时client端的path，即 http://localhost/posts/category/path 则会记录为 posts/category/path，之后查询的时候再根据这个 path 进行搜索
+~~仿照其他评论系统的模式，记录下此时client端的path，即 http://localhost/posts/category/path 则会记录为 posts/category/path，之后查询的时候再根据这个 path 进行搜索~~
+
+</details>
+
 
 ## 启动配置
 
@@ -95,12 +100,13 @@ enum CommentStatus {
 
    | 字段名称  |             字段说明             |
    | :-------: | :------------------------------: |
-   |   text  |          评论的具体内容          |
+   |   text    |          评论的具体内容          |
    |   date    | 评论的时间，以时间戳形式进行记录 |
    |  status   |    详见 [评论状态](#评论状态)    |
    |   type    |    详见 [评论种类](#评论种类)    |
-   |   path    |           所属页面的 path           |
+   |   path    |         所属页面的 path          |
    | paragraph |             所属段落             |
+   |    pid    |      文章 ID（如 ObjectID）      |
 
 3. 交互属性：评论父子关系，评论的 Reaction。
 

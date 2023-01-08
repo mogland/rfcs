@@ -21,10 +21,6 @@
 
 ![](https://user-images.githubusercontent.com/62133302/210674345-cfe4a12f-4bff-43f6-9518-1db33cb1f24f.jpg)
 
-## 审核逻辑
-
-TBD.
-
 ## 友链状态
 
 ```ts
@@ -53,6 +49,7 @@ export enum FriendStatus {
 |   头像   |    avatar    |    ❌     |      用于展示对方博客的图标或者是博主头像      |
 |   邮箱   |    email     |    ✅     |                  用于联系博主                  |
 |   状态   |    status    |    ❌     |             [友链状态](#友链状态)              |
+|   密钥   |    token    |    ❌     |             用于友链所有者编辑对应信息              |
 |  友链组  |    group     |    ✅     |          用于对友链的不同情况进行分类          |
 | 友链检测 |  autoCheck   |    -     |  用于**自动检测**对方博客是否添加己方博客友链  |
 | 订阅地址 |     feed     |    ✅     |                                                |
@@ -63,17 +60,15 @@ export enum FriendStatus {
 
 ```ts
 export enum FriendsEvents {
-  FriendsGetList = "friends.get.list",
-  FriendCreate = "friend.create",
-  FriendGet = "friend.get",
-  FriendPutByMaster = "friend.put.auth",
-  FriendPatchByMaster = "friend.patch.auth",
-  FriendPutWithToken = "friend.put.token",
-  FriendDeleteByMaster = "friend.delete.auth",
-  FriendDeleteWithToken = "friend.delete.token",
-  FriendAnalyseFeed = "friend.analyse.feed",
-  FriendAnalyseAutoCheck = "friend.analyse.autoCheck",
-  FriendCheckAlive = "friend.check.alive"
+  FriendsGetList = 'friends.get.list',
+  FriendsGetAllByMaster = 'friends.get.all.auth',
+  FriendsCheckAlive = 'friends.check.alive',
+  FriendsAnalyseFeed = 'friends.analyse.feed',
+  FriendCreate = 'friend.create',
+  FriendGet = 'friend.get',
+  FriendUpdateByMasterOrToken = 'friend.put.auth.token',
+  FriendDeleteByMasterOrToken = 'friend.delete.auth.token',
+  FriendAnalyseAutoCheck = 'friend.analyse.autoCheck',
 }
 ```
 

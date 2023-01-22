@@ -1,7 +1,7 @@
 # 主题模块
 
 | 创建日期     | 2022-08-23                                                   |
-| :-- | :-- |
+| :----------- | :----------------------------------------------------------- |
 | 目标完成版本 | 2.x                                                          |
 | 参考问题:    | RFC-0001, https://github.com/nx-space/core/issues/193, https://github.com/nx-space/core/issues/178, https://github.com/nx-space/core/issues/162, https://github.com/nx-space/core/issues/178 |
 | 当前状态     | Pending                                                      |
@@ -30,21 +30,59 @@
 
 # Detailed design 详细设计
 
-这是RFC的大部分内容。解释设计足够的细节，让熟悉 NEXT 的人理解，为熟悉的人来实现。这应该涉及到细节和极端情况，并包括如何使用该特性的示例。任何新的术语都应该在这里定义。
+## Model 定义
+
+```ts
+
+export class ThemeDto {
+  @IsString()
+  @IsNotEmpty()
+  id: string;
+
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+
+  @IsBoolean()
+  @IsOptional()
+  active?: boolean;
+
+  @IsString()
+  @IsOptional()
+  package?: string;
+
+  @IsString()
+  @IsOptional()
+  version?: string;
+
+  @IsString()
+  @IsOptional()
+  config?: string;
+}
+
+```
+
+
 
 # Drawbacks 缺点
 
-为什么我们不应该这样做呢?请考虑:
 
-- 实现成本并不高，但是不合理的设计会使开发主题变得复杂
-- 
-- NEXT 其他生态兼容的成本 （是 Breaking Change ？）
-
-选择任何道路都需要权衡。试着在这里辨认他们。
 
 # Alternatives 选择
 
-还考虑过其他的设计吗？不这样做的影响是什么？
+在 NestJS 中实现主题系统可以通过以下几种方式实现：
+
+1. 使用 NestJS 的中间件实现主题系统，在请求/响应生命周期中设置主题。
+2. 使用 NestJS 的拦截器实现主题系统，在拦截器中设置主题。
+3. 使用 NestJS 的管道实现主题系统，在管道中设置主题。
+4. 使用 NestJS 的模块实现主题系统，在模块的配置阶段设置主题。
+5. 在你的服务里面实现主题系统, 在请求进入服务之前设置主题。
+
+而我认为是应该使用微服务来实现主题系统的。在微服务架构中，可以将主题系统作为一个独立的微服务来实现。具体来说，微服务都可以通过 API 调用来与其他微服务通信，这样可以更好地控制主题系统的复杂性并使其可扩展性更高。
+
+在 NestJS 网关层实现主题系统可以让主题系统更加集中，并且能够更好地控制主题的应用。这样可以在网关层进行验证，授权，负载均衡，缓存等操作。
+
+但是如果你的主题系统需要更复杂的功能，例如添加自定义样式或者权限管理，利用NestJS微服务载入独立网关来实现主题系统可能是更好的选择。这样可以使用独立网关来处理主题相关的请求，并且可以使用微服务来实现更复杂的业务逻辑。
 
 # Adoption strategy 采用的策略
 

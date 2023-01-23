@@ -71,10 +71,10 @@ export class ThemeDto {
 - **post.ejs**: 文章页
 - **page.ejs**: 页面页
 - **archive.ejs**: 归档页
-- **category.ejs**: 分类页
-- **tag.ejs**: 标签页
+- **category.ejs**: 分类 & 标签页
+- **friends.ejs**: 友链页
 - **404.ejs**: 404页
-- **page-*.ejs**: 自定义页面，如：关于页、友链页等, `*` 为自定义的页面路径
+- **page-*.ejs**: 自定义页面，如：关于页 等, `*` 为自定义的页面路径
 
 ## 服务活动
 

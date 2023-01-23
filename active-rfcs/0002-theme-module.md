@@ -66,6 +66,7 @@ export class ThemeDto {
 - **config.yaml**: 主题的配置文件，用于描述主题的配置项，如：头像源、评论系统等
 - **i18n.yaml**: 主题的国际化文件，用于描述主题的国际化信息
 - **assets**: 主题的静态资源文件，如：css、js、图片等
+- **plugins**: 主题的插件文件，用于注入方法到主题中，如：moment.js 等方法类库
 - **index.ejs**: 主页
 - **post.ejs**: 文章页
 - **page.ejs**: 页面页
@@ -266,6 +267,28 @@ zh:
 <%- _i('hello') %> <%- _i('world') %>
 ```
 
+## 主题模板扩展
+
+我们考虑单独储存一个 `plugins` 文件夹，用于存放主题模板扩展的插件。
+
+### 定义主题模板扩展插件
+
+我们将会遍历 `plugins` 文件夹下的所有文件，将其作为主题模板扩展插件，将其挂载到主题模板中。
+
+```js
+// plugins/time.js
+module.exports = {
+  name: 'time',
+  description: '显示当前时间',
+  template: '<%- _i("time") %>：<%- new Date().toLocaleString() %>',
+}
+```
+
+调用主题模板扩展插件的方式如下：
+
+```ejs
+<%- time() %>
+```
 
 
 # Drawbacks 缺点

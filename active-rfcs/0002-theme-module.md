@@ -81,6 +81,7 @@ export class ThemeDto {
 我们考虑使用 YAML 定义主题配置
 
 ```yaml
+id: "theme.tiny.wibus-wee"
 language: zh # 语言, 要与 i18n.yaml 中设置的语言一致
 configs:
   - name: "头像源"

@@ -60,11 +60,27 @@ export class ThemeDto {
 - **version**: 主题版本
 - **config**: 主题配置，此处需要具体讨论
 
+## 主题目录结构
+
+- **packages.json**: 主题的配置文件，类似于 npm 的 `packages.json`，用于描述主题的基本信息，如：主题名字、版本、作者、描述等
+- **config.yaml**: 主题的配置文件，用于描述主题的配置项，如：头像源、评论系统等
+- **i18n.yaml**: 主题的国际化文件，用于描述主题的国际化信息
+- **assets**: 主题的静态资源文件，如：css、js、图片等
+- **index.ejs**: 主页
+- **post.ejs**: 文章页
+- **page.ejs**: 页面页
+- **archive.ejs**: 归档页
+- **category.ejs**: 分类页
+- **tag.ejs**: 标签页
+- **404.ejs**: 404页
+- **page-*.ejs**: 自定义页面，如：关于页、友链页等, `*` 为自定义的页面路径
+
 ## 主题配置
 
 我们考虑使用 YAML 定义主题配置
 
 ```yaml
+language: zh # 语言, 要与 i18n.yaml 中设置的语言一致
 configs:
   - name: "头像源"
     key: "avatar_source" 
@@ -225,6 +241,32 @@ value 为传入的值，value 会传入配置组件，需要与 data 中的 key 
 2. 手动安装、更新主题
 
 事实上，进入主题管理页面时，需要检查配置文件中的主题是否在主题目录中存在，如果不存在，需要提示用户主题已损坏，需要重新安装。
+
+## i18n 方案
+
+我们考虑注入一个 i18n 的函数 `_i(<key>)` ，这个函数可以根据传入的 key 来获取对应的 value。
+
+### 定义 i18n key
+
+我们考虑依然使用 yaml 文件来定义 i18n `i18n.yaml`
+
+```yaml
+# i18n.yaml
+en:
+  hello: 'Hello'
+  world: 'World'
+zh:
+  hello: '你好'
+  world: '世界'
+```
+
+按照上面的定义，我们可以通过 `_i('hello')` 来获取对应的 value。
+
+```ejs
+<%- _i('hello') %> <%- _i('world') %>
+```
+
+
 
 # Drawbacks 缺点
 

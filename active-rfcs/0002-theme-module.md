@@ -92,7 +92,7 @@ configs:
     type: "select"
     data:
       - name: "Gravatar"
-      	# key: "Gravatar"
+        # key: "Gravatar"
         value: "https://cn.gravatar.com/avatar/"
       - name: "国内源"
         key: "China"

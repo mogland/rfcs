@@ -56,7 +56,7 @@ export class ThemeDto {
 
 - **name**: 主题名字
 - **active**: 是否启动，需要保证 active 只有一种主题
-- **package**: 记录 packages.json 中的相关字段（ `description`, `mog` 等）
+- **package**: 记录 package.json 中的相关字段（ `description`, `mog` 等）
 - **version**: 主题版本
 - **config**: 主题配置，此处需要具体讨论
 

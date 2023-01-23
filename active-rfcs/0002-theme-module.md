@@ -38,33 +38,14 @@
 ## Model 定义
 
 ```ts
-
 export class ThemeDto {
-  @IsString()
-  @IsNotEmpty()
   id: string;
-
-  @IsString()
-  @IsNotEmpty()
   name: string;
-
-  @IsBoolean()
-  @IsOptional()
   active?: boolean;
-
-  @IsString()
-  @IsOptional()
   package?: string;
-
-  @IsString()
-  @IsOptional()
   version?: string;
-
-  @IsString()
-  @IsOptional()
   config?: string;
 }
-
 ```
 
 - **id**: 在「插件系统」中我们有提到插件的唯一id，而到主题我们也需要制作这么一个id，需要确保其唯一性
@@ -209,6 +190,41 @@ value 为传入的值，value 会传入配置组件，需要与 data 中的 key 
 
 value 为传入的值，value 会传入配置组件，需要与 data 中的 key 对应。
 
+## 主题安装、更新、卸载
+
+在主题安装、更新、卸载时，会触发主题的安装、更新、卸载活动传播，活动传播的执行顺序如下：
+
+1. 主题安装前钩子 `theme.beforeInstall`
+2. 主题安装钩子 `theme.install`
+3. 主题安装后钩子 `theme.afterInstall`
+4. 主题更新前钩子 `theme.beforeUpdate`
+5. 主题更新钩子 `theme.update`
+6. 主题更新后钩子 `theme.afterUpdate`
+7. 主题卸载前钩子 `theme.beforeUninstall`
+8. 主题卸载钩子 `theme.uninstall`
+9. 主题卸载后钩子 `theme.afterUninstall`
+
+全部活动都会在 notification_service 中启动监听并对外广播，可以通过监听这些活动来实现主题的安装、更新、卸载提醒。
+
+### 验证主题合法性
+
+在主题安装、更新、卸载时，会对主题的合法性进行验证，验证的内容如下：
+
+1. 主题是否存在（利用 `fs.existsSync`）
+2. 主题是否已经安装 （已经安装的都存于数据库）
+3. 主题 id 是否合法（只能包含字母、数字、下划线，且与已安装的主题 id 不重复）
+4. 配置文件是否存在且合法
+
+若主题不合法，需要提示用户主题已损坏，需要重新安装。
+
+### 安装、更新、卸载主题方式
+
+安装、更新、卸载主题的方式有两种：
+
+1. 通过主题管理页面安装、更新主题
+2. 手动安装、更新主题
+
+事实上，进入主题管理页面时，需要检查配置文件中的主题是否在主题目录中存在，如果不存在，需要提示用户主题已损坏，需要重新安装。
 
 # Drawbacks 缺点
 

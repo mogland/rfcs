@@ -275,18 +275,61 @@ zh:
 
 我们将会遍历 `plugins` 文件夹下的所有文件，将其作为主题模板扩展插件，将其挂载到主题模板中。
 
+### 简单实现
+
+```typescript
+const app: FastifyAdapter = new FastifyAdapter()
+
+app.getInstance().decorateReply('render', function (view, options) {
+  const plugins = fs.readdirSync(path.resolve(__dirname, 'plugins'))
+  const pluginMap = {}
+  plugins.forEach((plugin) => {
+    const pluginPath = path.resolve(__dirname, 'plugins', plugin)
+    const pluginModule = require(pluginPath)
+    pluginMap[pluginModule.name] = pluginModule
+  })
+
+  const template = fs.readFileSync(path.resolve(__dirname, 'views', view), 'utf-8')
+  const compiled = ejs.compile(template, {
+    filename: path.resolve(__dirname, 'views', view),
+    async: true,
+  })
+  
+  const result = compiled({
+    ...options,
+    ...pluginMap,
+  })
+
+  this.send(result)
+})
+
+app.setViewEngine({
+  engine: {
+    compile: (template, options) => {
+      return ejs.compile(template, options)
+    },
+    render: (compiled, options) => {
+      return compiled(options)
+    },
+  },
+  templates: path.resolve(__dirname, 'views'),
+})
+
+app.useStaticAssets(path.resolve(__dirname, 'public'))
+```
+
 ```js
 // plugins/time.js
 module.exports = {
   name: 'time',
-  description: '显示当前时间',
-  template: '<%- _i("time") %>：<%- new Date().toLocaleString() %>',
+  time: () => {
+    return new Date().toLocaleString()
+  },
 }
 ```
 
-调用主题模板扩展插件的方式如下：
-
 ```ejs
+<!-- views/index.ejs -->
 <%- time() %>
 ```
 

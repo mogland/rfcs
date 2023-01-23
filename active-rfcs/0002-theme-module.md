@@ -83,7 +83,7 @@ export class ThemeDto {
 ```yaml
 id: "theme.tiny.wibus-wee"
 language: zh # 语言, 要与 i18n.yaml 中设置的语言一致
-name: Tiny
+# name: Tiny # name 使用 package.json 中的值
 configs:
   - name: "头像源"
     key: "avatar_source" 

@@ -76,6 +76,20 @@ export class ThemeDto {
 - **404.ejs**: 404页
 - **page-*.ejs**: 自定义页面，如：关于页、友链页等, `*` 为自定义的页面路径
 
+## 服务活动
+
+```ts
+export enum ThemesEvents {
+  ThemesGetAll = 'themes.get.all',
+  ThemeGetInfo = 'theme.get.info',
+  ThemeGetConfig = 'theme.get.config',
+  ThemeActive = 'theme.active.auth',
+  ThemeDeactive = 'theme.deactive.auth',
+  ThemeDelete = 'theme.delete.auth',
+  ThemeUpdateConfig = 'theme.update.config.auth',
+}
+```
+
 ## 主题配置
 
 我们考虑使用 YAML 定义主题配置

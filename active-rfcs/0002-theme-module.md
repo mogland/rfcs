@@ -373,7 +373,7 @@ module.exports = {
 | 变量     | 描述                                                      | 类型                               |
 | :------- | :-------------------------------------------------------- | :--------------------------------- |
 | `site`   | [网站变量](https://hexo.io/zh-cn/docs/variables#网站变量) | `object`; 见 [网站变量](#网站变量) |
-| `page`   | 针对该页面的内容以及 front-matter 中自定义的变量。        | `object`; 见 [页面变量](#页面变量) |
+| `page`   | 针对该页面的内容和其他变量。                                | `object`; 见 [页面变量](#页面变量) |
 | `config` | 网站配置                                                  | `object` [ConfigInterface](https://github.com/mogland/core/blob/main/libs/config/src/config.interface.ts#L14-L30)          |
 | `theme`  | 主题配置。继承自网站配置。                                | `object` (主题配置文件)            |
 | `path`   | 当前页面的路径（不含根路径）                              | `string`                           |

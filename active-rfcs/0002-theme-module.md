@@ -377,8 +377,7 @@ module.exports = {
 | `config` | 网站配置                                                  | `object` (站点的配置文件)          |
 | `theme`  | 主题配置。继承自网站配置。                                | `object` (主题配置文件)            |
 | `path`   | 当前页面的路径（不含根路径）                              | `string`                           |
-| `url`    | 当前页面的完整网址                                        | `string`                           |
-| `env`    | 环境变量                                                  | `object`                           |
+| `url`    | 当前页面的URL信息                                         | `object`; 见 [URL变量](#URL变量)   |
 
 ### 网站变量
 
@@ -391,68 +390,38 @@ module.exports = {
 
 ### 页面变量
 
-**页面（`page`）**
+**页面（`page`）**: [`PageModel`](https://github.com/mogland/core/blob/main/apps/page-service/src/model/page.model.ts)
 
-| 变量             | 描述                                          | 类型               |
-| :--------------- | :-------------------------------------------- | :----------------- |
-| `page.title`     | 页面标题                                      | `string`           |
-| `page.date`      | 页面建立日期                                  | `string`           |
-| `page.updated`   | 页面更新日期                                  | `string`           |
-| `page.comments`  | 留言是否开启                                  | `boolean`          |
-| `page.layout`    | 布局名称                                      | `string`           |
-| `page.text`      | 页面的完整内容（已经过插件）                  | `string`           |
-| `page.summary`   | 页面摘要                                      | `string`           |
-| `page.path`      | 页面路径                                      | `string`           |
-| `page.permalink` | 页面的完整网址                                | `string`           |
-| `page.prev`      | 上一个页面。如果此为第一个页面则为 `null`。   | `object` 或 `null` |
-| `page.next`      | 下一个页面。如果此为最后一个页面则为 `null`。 | `object` 或 `null` |
-| `page.raw`       | 文章的原始内容（未经过插件）                  | `string`           |
-| `page.images`    | 文章的照片（可用于懒加载）                    | `array`            |
-| `page.link`      | 文章的外部链接（用于链接文章）                | `string`           |
+**文章 (`post`)**: [`PostModel`](https://github.com/mogland/core/blob/main/apps/page-service/src/model/post.model.ts)
 
-**文章 (`post`):** 与 `page` 变量大致相同，但新增以下变量。
+**首页（`index`）**: `AggregatePaginateResult<PostModel & Document>`
 
-| 变量              | 描述                      | 类型      |
-| :---------------- | :------------------------ | :-------- |
-| `page.published`  | 如果该文章已发布则为 true | `boolean` |
-| `page.categories` | 该文章的所有分类          | `array`   |
-| `page.tags`       | 该文章的所有标签          | `array`   |
+**归档 (`archives`)** ：与 `index` 布局相同
 
-**首页（`index`）**
+**分类 (`category`)** ：[`CategoryModel`](https://github.com/mogland/core/blob/main/apps/page-service/src/model/category.model.ts)
 
-| 变量               | 描述                                            | 类型     |
-| :----------------- | :---------------------------------------------- | :------- |
-| `page.per_page`    | 每页显示的文章数量                              | `number` |
-| `page.total`       | 总页数                                          | `number` |
-| `page.current`     | 目前页数                                        | `number` |
-| `page.current_url` | 目前分页的网址                                  | `string` |
-| `page.posts`       | 本页文章                                        | `object` |
-| `page.prev`        | 上一页的页数。如果此页是第一页的话则为 `0`。    | `number` |
-| `page.prev_link`   | 上一页的网址。如果此页是第一页的话则为 `''`。   | `string` |
-| `page.next`        | 下一页的页数。如果此页是最后一页的话则为 `0`。  | `number` |
-| `page.next_link`   | 下一页的网址。如果此页是最后一页的话则为 `''`。 | `string` |
-| `page.path`        | 当前页面的路径（不含根目录）。                  | `string` |
+**标签 (`tag`)** ：
 
-**归档 (`archive`)** ：与 `index` 布局相同，但新增以下变量。
+```ts
+interface ReturnData {
+  tag: string,
+  data: PostModel[]
+}
+```
 
-| 变量           | 描述                         | 类型      |
-| :------------- | :--------------------------- | :-------- |
-| `page.archive` | 等于 `true`                  | `boolean` |
-| `page.year`    | 年份归档 (4位)               | `number`  |
-| `page.month`   | 月份归档 (没有前导零的2位数) | `number`  |
+**友链 (`friends`)** ：`FriendsModel`
 
-**分类 (`category`)** ：与 `index` 布局相同，但新增以下变量。
+### URL变量
 
-| 变量            | 描述     | 类型     |
-| :-------------- | :------- | :------- |
-| `page.category` | 分类名称 | `string` |
-
-**标签 (`tag`)** ：与 `index` 布局相同，但新增以下变量。
-
-| 变量       | 描述     | 类型     |
-| :--------- | :------- | :------- |
-| `page.tag` | 标签名称 | `string` |
-
+| 变量 | 描述 | 类型 |
+| ---- | ---- | ---- |
+| url  | 完整的链接 | `string` |
+| path | 路径 | `string` |
+| query | 查询参数 | `object` |
+| params | 路径参数 | `object` |
+| origin | 域名: `protocol` + `host` | `string` |
+| host | 域名: `host` | `string` |
+| protocol | 协议 | `string` |
 
 # Alternatives 选择
 

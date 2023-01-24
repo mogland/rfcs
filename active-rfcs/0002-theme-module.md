@@ -41,6 +41,7 @@
 export class ThemeDto {
   id: string;
   name: string;
+  path: string;
   active?: boolean;
   package?: string;
   version?: string;
@@ -59,6 +60,7 @@ export class ThemeDto {
 - **package**: 记录 package.json 中的相关字段（ `description`, `mog` 等）
 - **version**: 主题版本
 - **config**: 主题配置，此处需要具体讨论
+- **path**: 主题文件夹名字
 
 ## 主题目录结构
 

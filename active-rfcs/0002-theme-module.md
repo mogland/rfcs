@@ -83,6 +83,7 @@ export class ThemeDto {
 ```ts
 export enum ThemesEvents {
   Ping = 'themes.ping',
+
   ThemesGetAll = 'themes.get.all',
   ThemeGetInfo = 'theme.get.info',
   ThemeActiveByMaster = 'theme.active.auth',
@@ -93,16 +94,17 @@ export enum ThemesEvents {
   ThemeUpdateConfigItem = 'theme.update.config.item.auth',
   // spread theme install hook
   ThemeBeforeInstall = 'theme.beforeInstall',
-  ThemeInstall = 'theme.install',
   ThemeAfterInstall = 'theme.afterInstall',
-  ThemeBeforeUpdate = 'theme.beforeUpdate',
-  ThemeUpdate = 'theme.update',
-  ThemeAfterUpdate = 'theme.afterUpdate',
+
+  ThemeBeforeActivate = 'theme.beforeActivate',
+  ThemeAfterActivate = 'theme.afterActivate',
+
+  ThemeBeforeDeactivate = 'theme.beforeDeactivate',
+  ThemeAfterDeactivate = 'theme.afterDeactivate',
+  
   ThemeBeforeUninstall = 'theme.beforeUninstall',
-  ThemeUninstall = 'theme.uninstall',
   ThemeAfterUninstall = 'theme.afterUninstall',
 }
-
 ```
 
 ## 主题配置

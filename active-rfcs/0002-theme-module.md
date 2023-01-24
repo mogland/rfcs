@@ -84,11 +84,12 @@ export class ThemeDto {
 export enum ThemesEvents {
   ThemesGetAll = 'themes.get.all',
   ThemeGetInfo = 'theme.get.info',
+  ThemeActiveByMaster = 'theme.active.auth',
+  ThemeDeleteByMaster = 'theme.delete.auth',
   ThemeGetConfig = 'theme.get.config',
-  ThemeActive = 'theme.active.auth',
-//  ThemeDeactive = 'theme.deactive.auth', // 必须有一个常驻的主题存在
-  ThemeDelete = 'theme.delete.auth',
+  ThemeGetConfigItem = 'theme.get.config.item',
   ThemeUpdateConfig = 'theme.update.config.auth',
+  ThemeUpdateConfigItem = 'theme.update.config.item.auth',
 }
 ```
 

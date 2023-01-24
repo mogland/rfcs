@@ -423,6 +423,12 @@ interface ReturnData {
 | host | 域名: `host` | `string` |
 | protocol | 协议 | `string` |
 
+## 主题开发
+
+1. 按照[主题目录结构](#主题目录结构)创建主题目录，文件名随意，但是需要在 `package.json` 中指定 `name` 字段，否则合法性校验会失败。
+2. 开始开发主题，其中需要有 EJS 的基础语法知识，主题渲染中提供了一些变量，可以在 EJS 中使用，具体变量见 [变量](#变量)。
+3. 开发完成后，将主题放置到 `themes` 目录下，然后在 `config.yml` 中配置 `id` 和 `language` 字段，即可使用。
+
 # Alternatives 选择
 
 在 NestJS 中实现主题系统可以通过以下几种方式实现：

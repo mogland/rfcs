@@ -84,7 +84,7 @@ export enum ThemesEvents {
   ThemeGetInfo = 'theme.get.info',
   ThemeGetConfig = 'theme.get.config',
   ThemeActive = 'theme.active.auth',
-  ThemeDeactive = 'theme.deactive.auth',
+//  ThemeDeactive = 'theme.deactive.auth', // 必须有一个常驻的主题存在
   ThemeDelete = 'theme.delete.auth',
   ThemeUpdateConfig = 'theme.update.config.auth',
 }

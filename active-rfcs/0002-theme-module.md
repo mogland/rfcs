@@ -83,15 +83,21 @@ export class ThemeDto {
 ```ts
 export enum ThemesEvents {
   Ping = 'themes.ping',
-
+  // common operations
   ThemesGetAll = 'themes.get.all',
   ThemeGetInfo = 'theme.get.info',
   ThemeActiveByMaster = 'theme.active.auth',
-  ThemeDeleteByMaster = 'theme.delete.auth',
   ThemeGetConfig = 'theme.get.config',
   ThemeGetConfigItem = 'theme.get.config.item',
   ThemeUpdateConfig = 'theme.update.config.auth',
   ThemeUpdateConfigItem = 'theme.update.config.item.auth',
+
+  // assets operations
+  ThemeDeleteByMaster = 'theme.delete.auth',
+  ThemeUploadByMaster = 'theme.upload.auth',
+  ThemeUpdateByMaster = 'theme.update.auth',
+  ThemeDownloadByMaster = 'theme.download.auth',
+
   // spread theme install hook
   ThemeBeforeInstall = 'theme.beforeInstall',
   ThemeAfterInstall = 'theme.afterInstall',
@@ -101,7 +107,7 @@ export enum ThemesEvents {
 
   ThemeBeforeDeactivate = 'theme.beforeDeactivate',
   ThemeAfterDeactivate = 'theme.afterDeactivate',
-  
+
   ThemeBeforeUninstall = 'theme.beforeUninstall',
   ThemeAfterUninstall = 'theme.afterUninstall',
 }

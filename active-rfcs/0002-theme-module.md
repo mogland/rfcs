@@ -376,58 +376,100 @@ module.exports = {
 
 ### 全局变量
 
-| 变量     | 描述                                                      | 类型                               |
-| :------- | :-------------------------------------------------------- | :--------------------------------- |
-| `site`   | [网站变量](https://hexo.io/zh-cn/docs/variables#网站变量) | `object`; 见 [网站变量](#网站变量) |
-| `page`   | 针对该页面的内容和其他变量。                                | `object`; 见 [页面变量](#页面变量) |
-| `config` | 网站配置                                                  | `object` [ConfigInterface](https://github.com/mogland/core/blob/main/libs/config/src/config.interface.ts#L14-L30)          |
-| `theme`  | 主题配置。继承自网站配置。                                | `object` (主题配置文件)            |
-| `path`   | 当前页面的路径（不含根路径）                              | `string`                           |
-| `url`    | 当前页面的URL信息                                         | `object`; 见 [URL变量](#URL变量)   |
+```ts
+{
+  site: any, // 见 「网站变量」
+  page: any, // 见 「页面变量」
+  config: ConfigInterface, // 见 「ConfigInterface」- https://github.com/mogland/core/blob/main/libs/config/src/config.interface.ts#L14-L30
+  theme: any, // 主题配置文件
+  path: string, // 当前页面的路径（不含根路径）
+  url: any, // 见 「URL变量」
+}
+```
 
 ### 网站变量
 
-| 变量              | 描述     | 类型                                   |
-| :---------------- | :------- | :------------------------------------- |
-| `site.posts`      | 所有文章 | `array`，包含了站点全部的文章 `object` |
-| `site.pages`      | 所有分页 | `array`，包含了站点全部的分页 `object` |
-| `site.categories` | 所有分类 | `array`，包含了站点全部的分类 `object` |
-| `site.tags`       | 所有标签 | `array`，包含了站点全部的标签 `object` |
+```ts
+{
+  posts: PostModel[], // 文章列表
+  pages: PageModel[], // 分页列表
+  categories: CategoryModel[], // 分类列表
+  tags: { // 标签列表
+    count: number, // 标签数量
+    name: string, // 标签名
+  }[],
+}
+```
 
 ### 页面变量
 
-**页面（`page`）**: [`PageModel`](https://github.com/mogland/core/blob/main/apps/page-service/src/model/page.model.ts)
+**页面（`page`）**: [`PageModel`](https://github.com/mogland/core/blob/main/apps/page-service/src/model/page.model.ts) - 不会输出 `password` 等隐私字段
 
-**文章 (`post`)**: [`PostModel`](https://github.com/mogland/core/blob/main/apps/page-service/src/model/post.model.ts)
+**文章 (`post`)**: [`PostModel`](https://github.com/mogland/core/blob/main/apps/page-service/src/model/post.model.ts) - 不会输出 `password` 等隐私字段
 
-**首页（`index`）**: `AggregatePaginateResult<PostModel & Document>`
+**首页（`index`）**
 
-**归档 (`archives`)** ：与 `index` 布局相同
+```ts
+{
+  docs: PostModel[], // 文章列表
+  totalDocs: number, // 文章总数
+  limit: number, // 每页文章数
+  totalPages: number, // 总页数
+  page: number, // 当前页
+  hasPrevPage: boolean, // 是否有上一页
+  hasNextPage: boolean, // 是否有下一页
+  prevPage: number | null, // 上一页页码
+  nextPage: number | null, // 下一页页码
+}
+```
 
 **分类 (`category`)** ：[`CategoryModel`](https://github.com/mogland/core/blob/main/apps/page-service/src/model/category.model.ts)
 
-**标签 (`tag`)** ：
+```ts
+data: {
+  [key in keyof CategoryModel]: CategoryModel[key]; // 继承自 CategoryModel 的字段
+  children: PostModel[], // 文章列表
+},
+isTag: false, // 是否是标签页
+isCategory: true, // 是否是分类或者标签页
+```
+
+**标签 (`tag`)**
 
 ```ts
-interface ReturnData {
-  tag: string,
-  data: PostModel[]
-}
+data: {
+  name: string, // 标签名
+  children: PostModel[], // 文章列表
+},
+isTag: true, // 是否是标签页
+isCategory: true, // 是否是分类或者标签页
+```
+
+**归档 (`archives`)**
+
+```ts
+data: {
+  children: PostModel[], // 文章列表
+},
+isCategory: false, // 是否是分类或者标签页
 ```
 
 **友链 (`friends`)** ：`FriendsModel`
 
 ### URL变量
 
-| 变量 | 描述 | 类型 |
-| ---- | ---- | ---- |
-| url  | 完整的链接 | `string` |
-| path | 路径 | `string` |
-| query | 查询参数 | `object` |
-| params | 路径参数 | `object` |
-| origin | 域名: `protocol` + `host` | `string` |
-| host | 域名: `host` | `string` |
-| protocol | 协议 | `string` |
+```ts
+{
+  url: string, // 完整的链接
+  path: string, // 路径
+  query: object, // 查询参数
+  params: object, // 路径参数
+  origin: string, // 域名: protocol + host
+  host: string, // 域名: host
+  protocol: string, // 协议
+}
+```
+
 
 ## 主题开发
 

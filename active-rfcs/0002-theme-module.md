@@ -117,10 +117,10 @@ export enum ThemesEvents {
 
 我们考虑使用 YAML 定义主题配置
 
+
 ```yaml
 id: "theme.tiny.wibus-wee"
 language: zh # 语言, 要与 i18n.yaml 中设置的语言一致
-# name: Tiny # name 使用 package.json 中的值
 configs:
   - name: "头像源"
     key: "avatar_source" 
@@ -137,7 +137,8 @@ configs:
     value: "Gravatar"
 ```
 
-- **name**: 配置展示名
+- **id**: 主题的唯一标识，格式建议为 `theme.{name}.{author}`
+- **language**: 主题的语言，要与 i18n.yaml 中设置的语言匹配
 - **key**: 配置储存名（取值的时候使用此名）
 
 key 是可选的，如果不去设置就与 name 是一样的。但是当 name 中涉及到一些特殊符号或者涉及中文字符的时候，强制需要填入 key
@@ -145,6 +146,7 @@ key 是可选的，如果不去设置就与 name 是一样的。但是当 name �
 - **type**: 配置组件
 - **data**: 传入配置组件的值（内部的定义与上方相似）
 - **value**: 默认值，会传入配置组件，可选
+
 
 ## 配置组件
 
@@ -176,15 +178,6 @@ key 是可选的，如果不去设置就与 name 是一样的。但是当 name �
   ```
 
 传入的 data 为一个对象，对象中包含 value 一个必须的字段，要求 value 为颜色值。
-
-- **slider**: 滑块
-
-  ```yaml
-  type: "slider"
-  value: 50
-  ```
-
-传入的 data 为一个对象，对象中包含 value 一个必须的字段，要求 value 为数字。
 
 - **radio**: 单选框
 
